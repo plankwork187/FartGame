@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Hold It In</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Nunito+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- Theme toggle — fixed top-right, always visible -->
+<button id="theme-toggle" onclick="(function(){var b=document.body;var dark=b.classList.toggle('dark-theme');document.getElementById('theme-toggle').textContent=dark?'☀️ Light':'🌙 Dark';})()" >🌙 Dark</button>
+
+<!-- ── BACK BUTTON ──────────────────────────────────────────────────────────
+     Fixed top-LEFT corner (opposite side from the dark-mode button).
+     Calls APP.goBack() which tracks screen history and navigates backwards.
+     Hidden on the title screen since there's nowhere to go back to.
+     TO CHANGE POSITION: edit #back-btn in css/style.css (top/left values).
+     ─────────────────────────────────────────────────────────────────────── -->
+<button id="back-btn" onclick="APP.goBack()" style="display:none" title="Go back">◀ Back</button>
+
+<!-- ── STAT INFO MODAL ─────────────────────────────────────────────────────
+     Appears when player clicks "ℹ️ Stats Guide" on the character select screen.
+     Explains every stat and what high/low values mean.
+     TO EDIT DESCRIPTIONS: find #stat-info-modal below and change the text.
+     ─────────────────────────────────────────────────────────────────────── -->
+<div id="stat-info-modal" style="display:none">
+  <div class="sim-backdrop" onclick="document.getElementById('stat-info-modal').style.display='none'"></div>
+  <div class="sim-box">
+    <h3 class="sim-title">📊 Character Stats Guide</h3>
+    <p class="sim-intro">All stats are rated 1–5. Higher stats always make the game <b>harder</b> (except where noted). Lower stats = easier run.</p>
+    <div class="sim-stat">
+      <div class="sim-stat-name">💨 Smell (1–5)</div>
+      <div class="sim-stat-desc"><b>How pungent your releases are.</b><br>Level 1 — barely a whiff; clouds are small and fade fast.<br>Level 5 — eye-wateringly strong; huge clouds that linger and tag NPCs from far away.<br><em>Higher = harder (bigger detection radius).</em></div>
+    </div>
+    <div class="sim-stat">
+      <div class="sim-stat-name">⏱ Linger (1–5)</div>
+      <div class="sim-stat-desc"><b>How long smell clouds hang in the air.</b><br>Level 1 — cloud vanishes in seconds; almost no trailing risk.<br>Level 5 — clouds persist for a very long time, tagging NPCs who walk through long after release.<br><em>Higher = harder (longer exposure window).</em></div>
+    </div>
+    <div class="sim-stat">
+      <div class="sim-stat-name">💥 Accident (1–5)</div>
+      <div class="sim-stat-desc"><b>How likely you are to fart accidentally.</b><br>Level 1 — near-perfect control; involuntary releases almost never happen.<br>Level 5 — accident-prone; involuntary farts fire often and release extra gas.<br><em>Higher = harder (more random accidents).</em></div>
+    </div>
+    <div class="sim-stat">
+      <div class="sim-stat-name">⚡ Frequency (1–5)</div>
+      <div class="sim-stat-desc"><b>How fast gas builds up passively.</b><br>Level 1 — slow build; plenty of time between releases.<br>Level 5 — gas fills up very fast; you must release constantly or risk accidents.<br><em>Higher = harder (constant pressure).</em></div>
+    </div>
+    <div class="sim-stat">
+      <div class="sim-stat-name">🔊 Volume (1–5)</div>
+      <div class="sim-stat-desc"><b>How loud your releases are.</b><br>Level 1 — whisper-quiet; sound barely travels.<br>Level 5 — very loud and wet; nearby NPCs react instantly even without smell.<br><em>Higher = harder (wider sound detection radius).</em></div>
+    </div>
+    <button class="big-btn big-btn-primary" onclick="document.getElementById('stat-info-modal').style.display='none'" style="margin-top:12px">Got it!</button>
+  </div>
+</div>
+
+<div id="app">
+
+  <!-- ───────────────────────── TITLE SCREEN ───────────────────────── -->
+  <section id="screen-title" class="screen screen-active">
+    <div class="title-burst-wrap">
+      <div class="title-burst"></div>
+      <h1 class="title-logo">Hold It In</h1>
+      <p class="title-tagline">a game of pressure, panic, and poor decisions</p>
+    </div>
+    <div class="title-menu">
+      <button class="big-btn big-btn-primary" id="btn-go-mode-select">Play</button>
+      <button class="big-btn" id="btn-go-howto">How to Play</button>
+    </div>
+    <p class="title-footer">made with love, beans, and bad choices</p>
+    <p class="title-footer">All characters are fictional and not based on any real person.</p>
+  </section>
+
+  <!-- ───────────────────────── HOW TO PLAY ───────────────────────── -->
+  <section id="screen-howto" class="screen">
+    <h2 class="screen-heading">How to Play</h2>
+    <div class="howto-list">
+      <div class="howto-row"><span class="howto-icon">↔️</span><span>Hold <b>left</b> or <b>right</b> to lean and release gas. Longer hold = more powerful (and riskier) release.</span></div>
+      <div class="howto-row"><span class="howto-icon">👃</span><span><b>Smell</b> creates a lingering cloud — bigger releases make bigger, longer-lasting clouds that can tag NPCs who walk through later.</span></div>
+      <div class="howto-row"><span class="howto-icon">👂</span><span><b>Loudness</b> is instant — anyone within hearing range reacts immediately, even from a distance, with no visible cloud.</span></div>
+      <div class="howto-row"><span class="howto-icon">🧍</span><span>NPCs exist at three depths: foreground, midground, and background. Closer NPCs notice you more easily.</span></div>
+      <div class="howto-row"><span class="howto-icon">📈</span><span>Reach the level's <b>gas target</b> before Suspicion maxes out to clear the level.</span></div>
+      <div class="howto-row"><span class="howto-icon">👥</span><span>Some levels include a <b>companion</b> standing right next to you with their own special twist.</span></div>
+      <div class="howto-row"><span class="howto-icon">⚡</span><span>Each character has a <b>Special Move</b> — unlocked in a future update. Watch this space!</span></div>
+    </div>
+    <button class="big-btn" id="btn-howto-back">Back</button>
+  </section>
+
+  <!-- ───────────────────────── MODE SELECT ───────────────────────── -->
+  <section id="screen-mode-select" class="screen">
+    <h2 class="screen-heading">Choose a Mode</h2>
+    <div class="mode-grid">
+      <button class="mode-card" id="mode-card-story" data-mode="story">
+        <div class="mode-card-title">Story Mode</div>
+        <div class="mode-card-sub">Endless procedural levels. Beat 30 to unlock more.</div>
+      </button>
+      <button class="mode-card" id="mode-card-stealth" data-mode="stealth">
+        <div class="mode-card-title">Stealth (Classic)</div>
+        <div class="mode-card-sub">The original free-play formula. Survive as long as you can.</div>
+      </button>
+      <button class="mode-card" id="mode-card-chaos" data-mode="chaos">
+        <div class="mode-card-title">Chaos Mode</div>
+        <div class="mode-card-sub">Infinite gas. No suspicion. Just go wild.</div>
+      </button>
+      <button class="mode-card mode-card-locked" id="mode-card-custom" data-mode="custom">
+        <div class="mode-card-title">Custom Mode <span class="lock-badge">🔒</span></div>
+        <div class="mode-card-sub">Unlocked at Story Level 30. Set every variable yourself.</div>
+      </button>
+      <button class="mode-card mode-card-locked" id="mode-card-endless" data-mode="endless">
+        <div class="mode-card-title">Endless Mode <span class="lock-badge">🔒</span></div>
+        <div class="mode-card-sub">Unlocked at Story Level 30. Difficulty keeps climbing forever.</div>
+      </button>
+    </div>
+    <button class="big-btn" id="btn-mode-back">Back</button>
+  </section>
+
+  <!-- ───────────────────────── CHARACTER SELECT ───────────────────────── -->
+  <section id="screen-char-select" class="screen">
+    <h2 class="screen-heading">Choose Your Character</h2>
+    <!-- Stats guide button — opens the stat-info-modal overlay -->
+    <button class="big-btn" id="btn-stat-guide" onclick="document.getElementById('stat-info-modal').style.display='flex'" style="align-self:center;font-size:13px;padding:8px 18px;">ℹ️ Stats Guide</button>
+    <div class="char-grid" id="char-grid"><!-- populated by ui.js from CHARACTERS --></div>
+    <!-- Slots 7–9: placeholder cards for future characters -->
+    <!-- TO ADD CHAR 7-9: add entries to CHARACTERS in data.js and CHARACTER_STATS in charstats.js.
+         These placeholder cards are shown automatically once those entries exist. -->
+    <div id="char-grid-future" class="char-grid-future">
+      <div class="char-card char-card-locked"><div class="char-card-lock">🔒</div><div class="char-card-name">Coming Soon</div><div class="char-card-tagline">Character 7</div></div>
+      <div class="char-card char-card-locked"><div class="char-card-lock">🔒</div><div class="char-card-name">Coming Soon</div><div class="char-card-tagline">Character 8</div></div>
+      <div class="char-card char-card-locked"><div class="char-card-lock">🔒</div><div class="char-card-name">Coming Soon</div><div class="char-card-tagline">Character 9</div></div>
+    </div>
+    <!-- Character stats panel — populated by ui.js when a char card is hovered/focused -->
+    <div id="char-stats-panel" class="char-stats-panel" style="display:none">
+      <div class="csp-title" id="csp-name"></div>
+      <div class="csp-category" id="csp-category"></div>
+      <div class="csp-stats" id="csp-stats"></div>
+    </div>
+    <button class="big-btn" id="btn-char-back">Back</button>
+  </section>
+
+  <!-- ───────────────────────── CUSTOM MODE SETUP ───────────────────────── -->
+  <section id="screen-custom-setup" class="screen">
+    <h2 class="screen-heading">Custom Mode</h2>
+    <p class="screen-sub">Set every variable yourself, then jump in.</p>
+    <div class="custom-form" id="custom-form"><!-- populated by ui.js --></div>
+    <div class="custom-actions">
+      <button class="big-btn" id="btn-custom-back">Back</button>
+      <button class="big-btn big-btn-primary" id="btn-custom-start">Start Level</button>
+    </div>
+  </section>
+
+  <!-- ───────────────────────── STORY PROGRESSION MAP ───────────────────────── -->
+  <section id="screen-story-map" class="screen">
+    <h2 class="screen-heading">Story Progress</h2>
+    <div class="story-progress-bar-wrap">
+      <div class="story-progress-bar-bg"><div class="story-progress-bar-fill" id="story-progress-fill"></div></div>
+      <div class="story-progress-label" id="story-progress-label">Level 1 of 30</div>
+    </div>
+    <div class="story-stats" id="story-stats"><!-- populated by ui.js --></div>
+    <button class="big-btn big-btn-primary" id="btn-story-continue">Continue</button>
+    <button class="big-btn" id="btn-story-back">Back to Modes</button>
+  </section>
+
+  <!-- ───────────────────────── LEVEL INTRO (VISUAL NOVEL) ───────────────────────── -->
+  <section id="screen-level-intro" class="screen">
+    <div class="vn-frame">
+      <div class="vn-backdrop" id="vn-backdrop"></div>
+      <div class="vn-tint" id="vn-tint"></div>
+
+      <div class="vn-info-chips" id="vn-info-chips"><!-- populated by ui.js --></div>
+
+      <div class="vn-portraits">
+        <img class="vn-portrait vn-portrait-player" id="vn-portrait-player" alt="">
+        <img class="vn-portrait vn-portrait-companion" id="vn-portrait-companion" alt="">
+      </div>
+
+      <div class="vn-textbox">
+        <div class="vn-speaker" id="vn-speaker"></div>
+        <div class="vn-line" id="vn-line"></div>
+        <button class="vn-next-btn" id="vn-next-btn">Next ▶</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────────────────────── LEVEL COMPLETE ───────────────────────── -->
+  <section id="screen-level-complete" class="screen">
+    <div class="complete-burst"></div>
+    <h2 class="screen-heading" id="complete-title">Level Complete!</h2>
+    <p class="screen-sub" id="complete-sub"></p>
+    <div id="complete-facecam-wrap" style="display:none">
+      <img id="complete-facecam" class="vn-portrait" alt="success reaction" />
+    </div>
+    <div class="complete-stats" id="complete-stats"><!-- populated by ui.js --></div>
+    <div id="complete-fart-log" style="width:100%;display:none;"></div>
+    <button class="big-btn big-btn-primary" id="btn-complete-next">Next Level</button>
+    <button class="big-btn" id="btn-complete-menu">Back to Modes</button>
+  </section>
+
+  <!-- ───────────────────────── CAUGHT / FAILURE SCREEN ───────────────────────── -->
+  <section id="screen-caught" class="screen">
+    <div class="complete-burst"></div>
+    <h2 class="screen-heading" id="caught-title">Failed! Try Again</h2>
+    <img class="vn-portrait" id="caught-facecam" alt="">
+    <p class="screen-sub" id="caught-sub"></p>
+    <div class="complete-stats" id="caught-stats"><!-- populated by ui.js --></div>
+    <div id="caught-fart-log" style="width:100%;display:none;"></div>
+    <button class="big-btn big-btn-primary" id="btn-caught-retry">Try Again</button>
+    <button class="big-btn" id="btn-caught-charselect">Change Character</button>
+    <button class="big-btn" id="btn-caught-mainmenu">Main Menu</button>
+  </section>
+
+  <!-- ───────────────────────── GAME SCREEN ───────────────────────── -->
+  <section id="screen-game" class="screen">
+
+    <div id="game">
+      <div id="hud-top">
+        <button id="btn-pause">⏸</button>
+        <div id="hud-level-tag" class="hud-level-tag"></div>
+      </div>
+
+      <div id="scene">
+        <div id="scene-bg"></div>
+        <div id="scene-tint"></div>
+        <div id="sky"></div>
+        <div id="ground"></div>
+        <div id="path"></div>
+
+        <img id="scene-seat" alt="" aria-hidden="true">
+
+        <div id="companion-wrap" class="companion-wrap">
+          <img id="companion-img" class="companion-img" alt="">
+          <div class="companion-name" id="companion-name"></div>
+        </div>
+
+        <div id="player-wrap">
+          <img id="player-img" alt="player"/>
+        </div>
+
+        <svg id="power-ring" viewBox="0 0 60 60" style="opacity:0;">
+          <circle cx="30" cy="30" r="26" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="3"/>
+          <circle id="power-arc" cx="30" cy="30" r="26" fill="none" stroke="#E75480" stroke-width="3.5"
+            stroke-dasharray="0 163" stroke-linecap="round" transform="rotate(-90 30 30)"/>
+        </svg>
+        <div id="power-label"></div>
+
+        <div id="facecam">
+          <img id="face-img" alt="facecam"/>
+          <div id="face-label">relaxed</div>
+        </div>
+
+        <!-- Game-over / pause overlay -->
+        <div id="overlay">
+          <div id="overlay-title">Busted!</div>
+          <div id="overlay-sub"></div>
+          <div id="overlay-score"></div>
+          <button id="overlay-btn">Try Again</button>
+          <button id="overlay-btn-menu" class="overlay-btn-secondary">Back to Modes</button>
+        </div>
+      </div>
+
+      <div id="hud">
+        <div class="hud-card">
+          <div class="hud-label">Suspicion</div>
+          <div class="bar-bg"><div class="bar-fill" id="susp-bar" style="width:0%;background:#3a9e3a"></div></div>
+        </div>
+        <div class="hud-card" id="gas-card">
+          <div class="hud-label" id="gas-label">Gas Pressure</div>
+          <div class="bar-bg"><div class="bar-fill" id="gas-bar" style="width:30%;background:#e8a020"></div></div>
+        </div>
+        <div id="score-card">
+          <div id="score-label">Score</div>
+          <div id="score-val">0</div>
+        </div>
+      </div>
+
+      <div id="target-card" class="target-card">
+        <div class="hud-label">Target Progress</div>
+        <div class="bar-bg"><div class="bar-fill" id="target-bar" style="width:0%;background:#5b8def"></div></div>
+        <div class="target-text" id="target-text">0 / 0</div>
+      </div>
+
+      <div id="extra-hud-card" class="hud-card extra-hud-card" style="display:none;">
+        <div class="hud-label" id="extra-hud-label"></div>
+        <div class="bar-bg"><div class="bar-fill" id="extra-hud-bar" style="width:0%;background:#d6549a"></div></div>
+      </div>
+
+      <div id="controls">
+        <button id="btn-left" style="border-radius:8px 0 0 8px;border-right:none;">← Hold Left</button>
+        <!-- ── SPECIAL MOVE BUTTON ───────────────────────────────────────────────
+             Infrastructure for per-character special moves (future feature).
+             Hidden by default — game.js calls SPECIAL.tryActivate() when pressed.
+             TO ADD A SPECIAL MOVE: define it in CHARACTER_SPECIALS in data.js
+             (each character gets a `special` object with id/label/cooldownMs/fn).
+             The button auto-shows when the active character has a special defined.
+             TO CHANGE BUTTON LOOK: edit #btn-special in css/style.css.
+             ─────────────────────────────────────────────────────────────────── -->
+        <button id="btn-special" style="display:none;border-radius:0;border-left:none;border-right:none;background:var(--caution);color:#fff;font-weight:800;" title="Special Move">⚡</button>
+        <button id="btn-right" style="border-radius:0 8px 8px 0;border-left:none;">Hold Right →</button>
+      </div>
+      <div id="status-msg"></div>
+    </div>
+
+  </section>
+
+</div>
+
+<script src="js/utils.js"></script>
+<script src="js/assets.js"></script>
+<script src="js/audio.js"></script>
+<script src="js/data.js"></script>
+<script src="js/npc.js"></script>
+<script src="js/cloud.js"></script>
+<script src="js/companion.js"></script>
+<script src="js/player.js"></script>
+<script src="js/generator.js"></script>
+<script src="js/releasetracker.js"></script>
+<script src="js/charstats.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/game.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
