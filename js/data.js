@@ -163,34 +163,76 @@ const CHARACTERS = {
       success2:  'characters/char6_success2.png',
     },
   },
-  // ── FUTURE CHARACTERS (7–9) ────────────────────────────────────────────────
-  // TO ADD CHARACTER 7: uncomment the block below, fill in the fields, then add
-  // matching entries in CHARACTER_STATS (charstats.js) and CHARACTER_SPECIALS above.
-  // The character will appear on the character select screen automatically.
+  // ── CHARACTERS 7–9 (now playable — add art when ready) ──────────────────────────
+  // Art uses ASSETS fallback placeholders until real PNGs are dropped in.
+  // TO ADD ART: create characters/char7_profile.png etc. and they'll load automatically.
   //
-  // char7: {
-  //   id: 'char7',
-  //   name: 'Character 7',
-  //   tagline: 'Tagline here.',
-  //   personality: 'personality description for dialogue generation',
-  //   profile: 'characters/char7_profile.png',
-  //   vn: 'characters/char7_VN.png',
-  //   body: 'characters/char7_body.png',
-  //   faces: {
-  //     disc_low: 'characters/char7_disc_low.png',
-  //     disc_high: 'characters/char7_disc_high.png',
-  //     lean1: 'characters/char7_lean1.png',
-  //     lean2: 'characters/char7_lean2.png',
-  //     lean_ext: 'characters/char7_lean_ext.png',
-  //     relief: ['characters/char7_relief.png', 'characters/char7_relief2.png'],
-  //     caught1: 'characters/char7_caught1.png',
-  //     caught2: 'characters/char7_caught2.png',
-  //     success1: 'characters/char7_success1.png',
-  //     success2: 'characters/char7_success2.png',
-  //   },
-  // },
-  // char8: { /* same shape as char7 but with char8_ image paths */ },
-  // char9: { /* same shape as char7 but with char9_ image paths */ },
+  // TO EDIT NAME/TAGLINE/PERSONALITY: change the fields below.
+  char7: {
+    id: 'char7',
+    name: 'Character 7',
+    tagline: 'Quiet type. Loud consequences.',
+    personality: 'reserved on the outside, absolute tornado on the inside',
+    profile: 'characters/char7_profile.png',
+    vn: 'characters/char7_VN.png',
+    body: 'characters/char7_body.png',
+    faces: {
+      disc_low:  'characters/char7_disc_low.png',
+      disc_high: 'characters/char7_disc_high.png',
+      lean1:     'characters/char7_lean1.png',
+      lean2:     'characters/char7_lean2.png',
+      lean_ext:  'characters/char7_lean_ext.png',
+      relief:    ['characters/char7_relief.png', 'characters/char7_relief2.png'],
+      caught1:   'characters/char7_caught1.png',
+      caught2:   'characters/char7_caught2.png',
+      success1:  'characters/char7_success1.png',
+      success2:  'characters/char7_success2.png',
+    },
+  },
+
+  char8: {
+    id: 'char8',
+    name: 'Character 8',
+    tagline: 'Always overdressed. Always a liability.',
+    personality: 'high maintenance, dramatically unlucky, somehow still charming',
+    profile: 'characters/char8_profile.png',
+    vn: 'characters/char8_VN.png',
+    body: 'characters/char8_body.png',
+    faces: {
+      disc_low:  'characters/char8_disc_low.png',
+      disc_high: 'characters/char8_disc_high.png',
+      lean1:     'characters/char8_lean1.png',
+      lean2:     'characters/char8_lean2.png',
+      lean_ext:  'characters/char8_lean_ext.png',
+      relief:    ['characters/char8_relief.png', 'characters/char8_relief2.png'],
+      caught1:   'characters/char8_caught1.png',
+      caught2:   'characters/char8_caught2.png',
+      success1:  'characters/char8_success1.png',
+      success2:  'characters/char8_success2.png',
+    },
+  },
+
+  char9: {
+    id: 'char9',
+    name: 'Character 9',
+    tagline: 'Knows everyone. Owes everyone an apology.',
+    personality: 'social butterfly with an unfortunate digestive schedule',
+    profile: 'characters/char9_profile.png',
+    vn: 'characters/char9_VN.png',
+    body: 'characters/char9_body.png',
+    faces: {
+      disc_low:  'characters/char9_disc_low.png',
+      disc_high: 'characters/char9_disc_high.png',
+      lean1:     'characters/char9_lean1.png',
+      lean2:     'characters/char9_lean2.png',
+      lean_ext:  'characters/char9_lean_ext.png',
+      relief:    ['characters/char9_relief.png', 'characters/char9_relief2.png'],
+      caught1:   'characters/char9_caught1.png',
+      caught2:   'characters/char9_caught2.png',
+      success1:  'characters/char9_success1.png',
+      success2:  'characters/char9_success2.png',
+    },
+  },
 
 };
 

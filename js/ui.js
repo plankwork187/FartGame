@@ -37,11 +37,6 @@ const UI = (() => {
   function wireStaticButtons() {
     byId('btn-go-mode-select').onclick = () => showScreen('screen-mode-select');
     byId('btn-go-howto').onclick = () => showScreen('screen-howto');
-    byId('btn-howto-back').onclick = () => showScreen('screen-title');
-    byId('btn-mode-back').onclick = () => showScreen('screen-title');
-    byId('btn-char-back').onclick = () => showScreen('screen-mode-select');
-    byId('btn-custom-back').onclick = () => showScreen('screen-mode-select');
-    byId('btn-story-back').onclick = () => showScreen('screen-mode-select');
 
     document.querySelectorAll('.mode-card').forEach(card => {
       card.onclick = () => {
@@ -55,12 +50,13 @@ const UI = (() => {
   function byId(id) { return document.getElementById(id); }
 
   // ── Unlocks: mode select reflects PROGRESS state ───────────────────────
+  // Custom mode is always unlocked. Endless unlocks at Story Level 30.
   function refreshModeSelect() {
-    const unlocked = progress.get().highestLevelCleared >= 0;
+    const endlessUnlocked = progress.get().highestLevelCleared >= 30;
     const customCard = byId('mode-card-custom');
     const endlessCard = byId('mode-card-endless');
-    customCard.classList.toggle('mode-card-locked', !unlocked);
-    endlessCard.classList.toggle('mode-card-locked', !unlocked);
+    if (customCard) customCard.classList.remove('mode-card-locked');
+    if (endlessCard) endlessCard.classList.toggle('mode-card-locked', !endlessUnlocked);
   }
 
   // ── Character select ────────────────────────────────────────────────
@@ -68,6 +64,10 @@ const UI = (() => {
     onCharacterChosen = onChosen;
     const grid = byId('char-grid');
     grid.innerHTML = '';
+    // Hide stat panel initially
+    const panel = byId('char-stats-panel');
+    if (panel) { panel.style.display = 'none'; panel.classList.remove('visible'); }
+
     Object.values(CHARACTERS).forEach(ch => {
       const card = document.createElement('div');
       card.className = 'char-card';
@@ -80,44 +80,64 @@ const UI = (() => {
       tagline.className = 'char-card-tagline';
       tagline.textContent = ch.tagline;
       card.append(img, name, tagline);
-      // Show stat panel on hover
+      // Show stat panel on hover/focus — right side
       card.addEventListener('mouseenter', () => showCharStatPanel(ch));
       card.addEventListener('focus',      () => showCharStatPanel(ch));
+      card.addEventListener('touchstart', (e) => { e.preventDefault(); showCharStatPanel(ch); }, { passive: false });
       card.onclick = () => { if (onCharacterChosen) onCharacterChosen(ch.id); };
       grid.appendChild(card);
     });
     showScreen('screen-char-select');
   }
 
-  // Renders the character stat panel beside the char grid
+  // Descriptive rating labels per stat level — fart-flavored and informative
+  const STAT_RATINGS = {
+    smell:     ['Barely a whiff', 'Mild crop dust', 'Silent but present', 'Rancid SBD territory', '☠️ Biological hazard'],
+    linger:    ['Gone in seconds', 'Brief awkwardness', 'Hangs around like a bad decision', 'Won\'t leave the room — pure SBD', 'Eternal crop dust. No escape.'],
+    accident:  ['Iron sphincter — zero accidents', 'Solid control, rare slip', 'Occasional involuntary BRAPs', 'Cut the cheese at will — chaos machine', 'Accidental SBDs constantly. You are NOT in charge.'],
+    frequency: ['Slow build — rare gassiness', 'Steady crop-dusting pressure', '💨 Constant gassiness — no breaks', 'Relentless BRAPs incoming', 'Maximum gassiness. Release or bust.'],
+    volume:    ['Silent but Deadly — whisper quiet', 'Audible SBD — neighbors notice', 'Loud BRAPs — hard to ignore', 'Very loud — wet and rancid', '🔊 Maximum volume — heard across the room'],
+  };
+
+  // Renders the character stat panel on the RIGHT side of the char select screen
   function showCharStatPanel(ch) {
     const panel = byId('char-stats-panel');
     if (!panel) return;
     const stats = (typeof CHAR_STATS !== 'undefined') ? CHAR_STATS.getAllStats() : {};
-    // FIX: robust lookup — try exact id, then lowercase, then search all keys case-insensitively
     const charKey = ch.id || '';
     const s = stats[charKey] || stats[charKey.toLowerCase()] ||
               Object.entries(stats).find(([k]) => k.toLowerCase() === charKey.toLowerCase())?.[1] || null;
+
     byId('csp-name').textContent = ch.name;
-    byId('csp-category').textContent = s ? ('Size: ' + s.sizeCategory.charAt(0).toUpperCase() + s.sizeCategory.slice(1)) : '';
+    byId('csp-category').textContent = s ? ('📐 ' + s.sizeCategory.charAt(0).toUpperCase() + s.sizeCategory.slice(1)) : '';
+    const taglineEl = byId('csp-tagline');
+    if (taglineEl) taglineEl.textContent = ch.tagline || '';
+
     const stDefs = [
-      { key: 'smell',     label: '💨 Smell',     tip: '1=barely pungent, 5=huge cloud' },
-      { key: 'linger',    label: '⏱ Linger',    tip: '1=fades fast, 5=lingers forever' },
-      { key: 'accident',  label: '💥 Accident',  tip: '1=iron control, 5=very accident-prone' },
-      { key: 'frequency', label: '⚡ Frequency', tip: '1=slow build, 5=constant pressure' },
-      { key: 'volume',    label: '🔊 Volume',    tip: '1=silent, 5=very loud' },
+      { key: 'smell',     label: '💨 Smell',     tip: 'Cloud size & detection radius' },
+      { key: 'linger',    label: '⏱ Linger',    tip: 'How long clouds hang around' },
+      { key: 'accident',  label: '💥 Accident',  tip: 'Chance of involuntary releases' },
+      { key: 'frequency', label: '⚡ Frequency', tip: 'How fast gas builds up' },
+      { key: 'volume',    label: '🔊 Volume',    tip: 'Loudness & sound detection' },
     ];
     const stEl = byId('csp-stats');
     stEl.innerHTML = '';
     stDefs.forEach(def => {
-      // FIX: look up stat by key directly; fallback to 0 so missing stats show empty not 3
-      const val = s ? (s[def.key] != null ? s[def.key] : 0) : 0;
+      const val = s ? (s[def.key] != null ? Math.round(s[def.key]) : 0) : 0;
       const row = document.createElement('div');
       row.className = 'csp-stat-row';
       const dots = Array.from({length:5}, (_,i) => `<span class="csp-dot${i < val ? ' csp-dot-on' : ''}">${i < val ? '●' : '○'}</span>`).join('');
-      row.innerHTML = `<span class="csp-stat-label">${def.label}</span><span class="csp-stat-dots">${dots}</span><span class="csp-stat-tip">${def.tip}</span>`;
+      const ratingText = val > 0 ? (STAT_RATINGS[def.key][val - 1] || '') : '—';
+      row.innerHTML = `
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span class="csp-stat-label">${def.label}</span>
+          <span class="csp-stat-dots">${dots}</span>
+        </div>
+        <span class="csp-stat-rating">${ratingText}</span>
+        <span class="csp-stat-tip">${def.tip}</span>`;
       stEl.appendChild(row);
     });
+    panel.classList.add('visible');
     panel.style.display = 'block';
   }
 
@@ -392,9 +412,23 @@ const UI = (() => {
       stats.appendChild(card);
     });
 
-    byId('btn-complete-next').textContent = result.success ? 'Next Level' : 'Try Again';
-    byId('btn-complete-next').onclick = onNext;
-    byId('btn-complete-menu').onclick = onMenu;
+    // Custom mode gets its own action buttons (make new level / menu)
+    const customActions = byId('complete-custom-actions');
+    const normalActions = byId('complete-normal-actions');
+    if (result.mode === 'custom') {
+      if (customActions) customActions.style.display = 'flex';
+      if (normalActions) normalActions.style.display = 'none';
+      const newLevelBtn = byId('btn-complete-custom-newlevel');
+      const menuBtn = byId('btn-complete-custom-menu');
+      if (newLevelBtn) newLevelBtn.onclick = onNext; // onNext for custom = go back to setup
+      if (menuBtn) menuBtn.onclick = onMenu;
+    } else {
+      if (customActions) customActions.style.display = 'none';
+      if (normalActions) normalActions.style.display = 'flex';
+      byId('btn-complete-next').textContent = result.success ? 'Next Level' : 'Try Again';
+      byId('btn-complete-next').onclick = onNext;
+      byId('btn-complete-menu').onclick = onMenu;
+    }
 
     // Inject fart log summary if available
     const fartLogWrap = byId('complete-fart-log');
@@ -419,7 +453,7 @@ const UI = (() => {
   // assets — character.faces.caught1/caught2, same images PLAYER.setFace
   // already uses in-scene). `onRetry`/`onCharacterSelect`/`onMainMenu`
   // are callbacks wired by main.js.
-  function showCaughtScreen(result, character, onRetry, onCharacterSelect, onMainMenu) {
+  function showCaughtScreen(result, character, onRetry, onCharacterSelect, onMainMenu, onChangeSettings) {
     byId('caught-title').textContent = 'Failed! Try Again';
     byId('caught-sub').textContent = randLine(DIALOGUE.level_failed_suspicion, { character: result.characterName });
 
@@ -446,6 +480,17 @@ const UI = (() => {
     byId('btn-caught-retry').onclick = onRetry;
     byId('btn-caught-charselect').onclick = onCharacterSelect;
     byId('btn-caught-mainmenu').onclick = onMainMenu;
+
+    // Custom mode: show Change Settings button
+    const changeSettingsBtn = byId('btn-caught-changesettings');
+    if (changeSettingsBtn) {
+      if (result.mode === 'custom' && onChangeSettings) {
+        changeSettingsBtn.style.display = '';
+        changeSettingsBtn.onclick = onChangeSettings;
+      } else {
+        changeSettingsBtn.style.display = 'none';
+      }
+    }
 
     // Inject fart log summary if available
     const caughtFartLogWrap = byId('caught-fart-log');

@@ -102,22 +102,31 @@ const APP = (() => {
     UI.showScreen('screen-title');
   }
 
-  // Show/hide the back button based on the current screen.
-  // The back button is always visible EXCEPT on title and game screens.
+  // Show/hide the back button. Hidden on title only. Always visible on all other screens.
+  // On the game screen, back goes to character select (pausing the game first if running).
   function updateBackBtn(screenId) {
     const btn = document.getElementById('back-btn');
     if (!btn) return;
-    btn.style.display = (screenId === 'screen-title' || screenId === 'screen-game') ? 'none' : '';
+    if (screenId === 'screen-title') {
+      btn.style.display = 'none';
+    } else {
+      btn.style.display = '';
+    }
   }
 
-  // Called by the back button in index.html (APP.goBack()).
-  // Navigates to the previous screen in history, or falls back to mode select.
+  // Back button click — works from any non-title screen.
+  // On the game screen: pause the game and go to character select.
   function goBack() {
     const current = document.querySelector('.screen.screen-active');
-    if (current && current.id === 'screen-game') return; // can't back out of gameplay
+    if (current && current.id === 'screen-game') {
+      // Pause first, then go to character select
+      GAME.setPausedPublic && GAME.setPausedPublic(true);
+      GAME.stop && GAME.stop();
+      goToCharacterSelect();
+      return;
+    }
     if (screenHistory.length > 0) {
       const prev = screenHistory.pop();
-      // Use internal showScreen without re-pushing to history
       document.querySelectorAll('.screen').forEach(s => s.classList.remove('screen-active'));
       const target = document.getElementById(prev);
       if (target) {
@@ -240,7 +249,14 @@ const APP = (() => {
         selectedCharacter,
         () => retrySameRun(result),
         () => goToCharacterSelect(),
-        () => UI.showScreen('screen-mode-select')
+        () => UI.showScreen('screen-mode-select'),
+        result.mode === 'custom' ? () => {
+          // "Change Settings" for custom mode — go back to setup form
+          UI.populateCustomSetup((values) => {
+            customOptions = values;
+            beginCustomLevel();
+          });
+        } : null
       );
       return;
     }
@@ -303,8 +319,11 @@ const APP = (() => {
 
   function handleCompleteNext(result) {
     if (result.mode === 'custom') {
-      // Custom levels have no natural "next" — go back to the form.
-      UI.showScreen('screen-mode-select');
+      // Custom win: go back to setup so player can create a new level
+      UI.populateCustomSetup((values) => {
+        customOptions = values;
+        beginCustomLevel();
+      });
       return;
     }
 
@@ -313,7 +332,176 @@ const APP = (() => {
     beginGeneratedLevel(nextLevelNumber, result.mode);
   }
 
-  return { init, goBack };
+  // Expose internals for CUSTOM_PANEL mid-game editing
+  function _getCustomOptions() { return customOptions; }
+  function _setCustomOptions(v) { customOptions = v; }
+  function _getSelectedCharacter() { return selectedCharacter; }
+  function _setSelectedCharacter(ch) { selectedCharacter = ch; }
+
+  return { init, goBack, _getCustomOptions, _setCustomOptions, _getSelectedCharacter, _setSelectedCharacter };
+})();
+
+/* ----------------------------------------------------------------------
+   CUSTOM_PANEL — mid-game settings panel for Custom Mode.
+   Allows changing character, stats, and level settings while paused.
+   The ⚙️ button in HUD triggers CUSTOM_PANEL.open().
+------------------------------------------------------------------------- */
+const CUSTOM_PANEL = (() => {
+  let panelValues = {};
+  let isOpen = false;
+
+  function open() {
+    if (!APP._getCustomOptions || !APP._getSelectedCharacter) return;
+    const opts = APP._getCustomOptions() || {};
+    const panel = document.getElementById('custom-ingame-panel');
+    const form = document.getElementById('custom-ingame-form');
+    if (!panel || !form) return;
+
+    // Pause the game
+    GAME.setPausedPublic(true);
+
+    panelValues = { ...opts };
+    form.innerHTML = '';
+
+    // Character select dropdown
+    const charWrap = document.createElement('div');
+    charWrap.className = 'custom-field';
+    charWrap.style.gridColumn = '1 / -1';
+    const charLabel = document.createElement('div');
+    charLabel.className = 'custom-field-label';
+    charLabel.innerHTML = '<span>🧍 Character</span>';
+    const charSelect = document.createElement('select');
+    charSelect.className = 'custom-select';
+    Object.values(CHARACTERS).forEach(ch => {
+      const o = document.createElement('option');
+      o.value = ch.id;
+      o.textContent = ch.name;
+      if (panelValues.characterId === ch.id) o.selected = true;
+      charSelect.appendChild(o);
+    });
+    charSelect.onchange = () => { panelValues.characterId = charSelect.value; };
+    // Set initial value to current character
+    const curChar = APP._getSelectedCharacter();
+    if (curChar) charSelect.value = curChar.id;
+    panelValues.characterId = charSelect.value;
+    charWrap.append(charLabel, charSelect);
+    form.appendChild(charWrap);
+
+    // Level sliders
+    const fields = [
+      { key: 'npcDensity', label: 'NPC Density', min: 0.1, max: 1, step: 0.05 },
+      { key: 'environmentNoise', label: 'Env Noise', min: 0.02, max: 1, step: 0.05 },
+      { key: 'gasPressureLevel', label: 'Gas Pressure', min: 0.1, max: 1, step: 0.05 },
+      { key: 'smellLevel', label: 'Smell Level', min: 0.1, max: 1, step: 0.05 },
+      { key: 'loudLevel', label: 'Loudness', min: 0.1, max: 1, step: 0.05 },
+      { key: 'targetGas', label: 'Gas Target', min: 30, max: 300, step: 10 },
+    ];
+    fields.forEach(f => {
+      const defaultVal = opts[f.key] != null ? opts[f.key] : ((f.min + f.max) / 2);
+      panelValues[f.key] = defaultVal;
+      const wrap = document.createElement('div');
+      wrap.className = 'custom-field';
+      const labelRow = document.createElement('div');
+      labelRow.className = 'custom-field-label';
+      const valId = 'cip-val-' + f.key;
+      labelRow.innerHTML = `<span>${f.label}</span><span class="value" id="${valId}">${defaultVal}</span>`;
+      const input = document.createElement('input');
+      input.type = 'range'; input.className = 'custom-range';
+      input.min = f.min; input.max = f.max; input.step = f.step; input.value = defaultVal;
+      input.oninput = () => {
+        panelValues[f.key] = parseFloat(input.value);
+        const el = document.getElementById(valId);
+        if (el) el.textContent = input.value;
+      };
+      wrap.append(labelRow, input);
+      form.appendChild(wrap);
+    });
+
+    // Stat override sliders
+    const statHeader = document.createElement('div');
+    statHeader.className = 'custom-section-header';
+    statHeader.textContent = '— Character Stat Overrides —';
+    form.appendChild(statHeader);
+    const statFields = [
+      { key: 'stat_smell', label: '💨 Smell', tip: '1–5' },
+      { key: 'stat_linger', label: '⏱ Linger', tip: '1–5' },
+      { key: 'stat_accident', label: '💥 Accident', tip: '1–5' },
+      { key: 'stat_frequency', label: '⚡ Frequency', tip: '1–5' },
+      { key: 'stat_volume', label: '🔊 Volume', tip: '1–5' },
+    ];
+    statFields.forEach(f => {
+      const defaultVal = opts[f.key] != null ? opts[f.key] : 3;
+      panelValues[f.key] = defaultVal;
+      const wrap = document.createElement('div');
+      wrap.className = 'custom-field';
+      const valId = 'cip-val-' + f.key;
+      const labelRow = document.createElement('div');
+      labelRow.className = 'custom-field-label';
+      labelRow.innerHTML = `<span>${f.label}</span><span class="value" id="${valId}">${defaultVal}</span>`;
+      const input = document.createElement('input');
+      input.type = 'range'; input.className = 'custom-range';
+      input.min = 1; input.max = 5; input.step = 1; input.value = defaultVal;
+      input.oninput = () => {
+        panelValues[f.key] = parseFloat(input.value);
+        const el = document.getElementById(valId);
+        if (el) el.textContent = input.value;
+      };
+      wrap.append(labelRow, input);
+      form.appendChild(wrap);
+    });
+
+    panel.style.display = 'flex';
+    isOpen = true;
+  }
+
+  function close() {
+    const panel = document.getElementById('custom-ingame-panel');
+    if (panel) panel.style.display = 'none';
+    isOpen = false;
+    GAME.setPausedPublic(false);
+  }
+
+  function apply() {
+    // Update the active custom options in APP
+    if (APP._setCustomOptions) APP._setCustomOptions(panelValues);
+
+    // Switch character if changed
+    const newCharId = panelValues.characterId;
+    const selectedChar = APP._getSelectedCharacter();
+    if (newCharId && newCharId !== (selectedChar && selectedChar.id)) {
+      const newChar = CHARACTERS[newCharId];
+      if (newChar) {
+        APP._setSelectedCharacter(newChar);
+        PLAYER.setCharacter(newChar);
+        if (typeof CHAR_STATS !== 'undefined') {
+          const overrides = {
+            smell: panelValues.stat_smell,
+            linger: panelValues.stat_linger,
+            accident: panelValues.stat_accident,
+            frequency: panelValues.stat_frequency,
+            volume: panelValues.stat_volume,
+          };
+          CHAR_STATS.applyToPlayer(newChar.id, overrides);
+        }
+      }
+    } else {
+      // Apply stat overrides to current character
+      if (typeof CHAR_STATS !== 'undefined') {
+        const overrides = {
+          smell: panelValues.stat_smell,
+          linger: panelValues.stat_linger,
+          accident: panelValues.stat_accident,
+          frequency: panelValues.stat_frequency,
+          volume: panelValues.stat_volume,
+        };
+        CHAR_STATS.applyToPlayer(selectedChar ? selectedChar.id : null, overrides);
+      }
+    }
+
+    close();
+  }
+
+  return { open, close, apply };
 })();
 
 document.addEventListener('DOMContentLoaded', () => {

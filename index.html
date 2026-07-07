@@ -13,47 +13,81 @@
 <body>
 
 <!-- Theme toggle — fixed top-right, always visible -->
-<button id="theme-toggle" onclick="(function(){var b=document.body;var dark=b.classList.toggle('dark-theme');document.getElementById('theme-toggle').textContent=dark?'☀️ Light':'🌙 Dark';})()" >🌙 Dark</button>
+<button id="theme-toggle" onclick="(function(){var b=document.body;var dark=b.classList.toggle('dark-theme');document.getElementById('theme-toggle').textContent=dark?'☀️ Light':'🌙 Dark';})()">🌙 Dark</button>
 
 <!-- ── BACK BUTTON ──────────────────────────────────────────────────────────
-     Fixed top-LEFT corner (opposite side from the dark-mode button).
-     Calls APP.goBack() which tracks screen history and navigates backwards.
-     Hidden on the title screen since there's nowhere to go back to.
+     Fixed top-LEFT corner. Hidden on title screen only.
+     On the game screen, shown only when paused (game.js toggles .back-btn-game-visible).
      TO CHANGE POSITION: edit #back-btn in css/style.css (top/left values).
      ─────────────────────────────────────────────────────────────────────── -->
 <button id="back-btn" onclick="APP.goBack()" style="display:none" title="Go back">◀ Back</button>
 
 <!-- ── STAT INFO MODAL ─────────────────────────────────────────────────────
-     Appears when player clicks "ℹ️ Stats Guide" on the character select screen.
-     Explains every stat and what high/low values mean.
      TO EDIT DESCRIPTIONS: find #stat-info-modal below and change the text.
      ─────────────────────────────────────────────────────────────────────── -->
 <div id="stat-info-modal" style="display:none">
   <div class="sim-backdrop" onclick="document.getElementById('stat-info-modal').style.display='none'"></div>
   <div class="sim-box">
     <h3 class="sim-title">📊 Character Stats Guide</h3>
-    <p class="sim-intro">All stats are rated 1–5. Higher stats always make the game <b>harder</b> (except where noted). Lower stats = easier run.</p>
+    <p class="sim-intro">All stats are rated 1–5. Higher stats always make the game <b>harder</b>. Lower stats = easier run. Choose wisely (or don't, we're not your mom).</p>
     <div class="sim-stat">
       <div class="sim-stat-name">💨 Smell (1–5)</div>
-      <div class="sim-stat-desc"><b>How pungent your releases are.</b><br>Level 1 — barely a whiff; clouds are small and fade fast.<br>Level 5 — eye-wateringly strong; huge clouds that linger and tag NPCs from far away.<br><em>Higher = harder (bigger detection radius).</em></div>
+      <div class="sim-stat-desc"><b>How pungent your crop dust is.</b><br>
+        ⭐ Level 1 — <em>Barely a whiff.</em> A ghost SBD. NPCs have to bury their face in it to notice.<br>
+        ⭐⭐⭐ Level 3 — <em>Rancid and present.</em> A respectable Silent but Deadly cloud. You'd know.<br>
+        ⭐⭐⭐⭐⭐ Level 5 — <em>☠️ Biological hazard.</em> Massive, eye-watering crop dust. Tags NPCs from across the room.<br>
+        <em>Higher = harder (bigger detection radius).</em></div>
     </div>
     <div class="sim-stat">
       <div class="sim-stat-name">⏱ Linger (1–5)</div>
-      <div class="sim-stat-desc"><b>How long smell clouds hang in the air.</b><br>Level 1 — cloud vanishes in seconds; almost no trailing risk.<br>Level 5 — clouds persist for a very long time, tagging NPCs who walk through long after release.<br><em>Higher = harder (longer exposure window).</em></div>
+      <div class="sim-stat-desc"><b>How long SBD clouds hang in the air.</b><br>
+        ⭐ Level 1 — <em>Gone in seconds.</em> Like it never crop-dusted at all. Very forgivable.<br>
+        ⭐⭐⭐ Level 3 — <em>Hangs around awkwardly.</em> That rancid aftertaste that won't quit.<br>
+        ⭐⭐⭐⭐⭐ Level 5 — <em>Eternal SBD.</em> The cloud will outlive your dignity. NPCs walking through much later still get gassed.<br>
+        <em>Higher = harder (longer exposure window).</em></div>
     </div>
     <div class="sim-stat">
       <div class="sim-stat-name">💥 Accident (1–5)</div>
-      <div class="sim-stat-desc"><b>How likely you are to fart accidentally.</b><br>Level 1 — near-perfect control; involuntary releases almost never happen.<br>Level 5 — accident-prone; involuntary farts fire often and release extra gas.<br><em>Higher = harder (more random accidents).</em></div>
+      <div class="sim-stat-desc"><b>How likely you are to cut the cheese accidentally.</b><br>
+        ⭐ Level 1 — <em>Iron sphincter.</em> Zero accidental BRAPs. A true professional.<br>
+        ⭐⭐⭐ Level 3 — <em>Normal gassiness.</em> Occasionally loses the battle. Mild accidental SBDs.<br>
+        ⭐⭐⭐⭐⭐ Level 5 — <em>Accidental BRAPs on repeat.</em> Involuntary crop dusting constantly. You are NOT in charge here.<br>
+        <em>Higher = harder (more random accidents).</em></div>
     </div>
     <div class="sim-stat">
       <div class="sim-stat-name">⚡ Frequency (1–5)</div>
-      <div class="sim-stat-desc"><b>How fast gas builds up passively.</b><br>Level 1 — slow build; plenty of time between releases.<br>Level 5 — gas fills up very fast; you must release constantly or risk accidents.<br><em>Higher = harder (constant pressure).</em></div>
+      <div class="sim-stat-desc"><b>How fast gas builds up passively.</b><br>
+        ⭐ Level 1 — <em>Slow gassiness.</em> Plenty of breathing room between SBDs.<br>
+        ⭐⭐⭐ Level 3 — <em>Steady crop-dusting pressure.</em> Manageable, but always there.<br>
+        ⭐⭐⭐⭐⭐ Level 5 — <em>💨 Maximum gassiness.</em> Release constantly or it all comes out at once. No mercy.<br>
+        <em>Higher = harder (constant pressure).</em></div>
     </div>
     <div class="sim-stat">
       <div class="sim-stat-name">🔊 Volume (1–5)</div>
-      <div class="sim-stat-desc"><b>How loud your releases are.</b><br>Level 1 — whisper-quiet; sound barely travels.<br>Level 5 — very loud and wet; nearby NPCs react instantly even without smell.<br><em>Higher = harder (wider sound detection radius).</em></div>
+      <div class="sim-stat-desc"><b>How loud your BRAPs are.</b><br>
+        ⭐ Level 1 — <em>Silent but Deadly.</em> Pure SBD. Ears are safe, noses are not.<br>
+        ⭐⭐⭐ Level 3 — <em>Audible crop dust.</em> Nearby NPCs perk up. Start coughing strategically.<br>
+        ⭐⭐⭐⭐⭐ Level 5 — <em>🔊 Maximum BRAP.</em> Loud, wet, rancid. Heard from across the room. Instantly.<br>
+        <em>Higher = harder (wider sound detection radius).</em></div>
     </div>
     <button class="big-btn big-btn-primary" onclick="document.getElementById('stat-info-modal').style.display='none'" style="margin-top:12px">Got it!</button>
+  </div>
+</div>
+
+<!-- ── CUSTOM MODE IN-GAME PANEL ────────────────────────────────────────────
+     Shown during gameplay in custom mode when the player taps the ⚙️ button.
+     Lets players adjust character and level settings mid-game.
+     ─────────────────────────────────────────────────────────────────────── -->
+<div id="custom-ingame-panel" style="display:none">
+  <div class="sim-backdrop" onclick="CUSTOM_PANEL.close()"></div>
+  <div class="sim-box" id="custom-ingame-box">
+    <h3 class="sim-title">⚙️ Custom Settings</h3>
+    <p style="font-size:12px;color:var(--ink-soft);margin:0 0 8px">Game paused while you adjust. Changes apply instantly.</p>
+    <div id="custom-ingame-form"></div>
+    <div style="display:flex;gap:10px;margin-top:12px">
+      <button class="big-btn" onclick="CUSTOM_PANEL.close()" style="flex:1">Close</button>
+      <button class="big-btn big-btn-primary" onclick="CUSTOM_PANEL.apply()" style="flex:1">Apply & Resume</button>
+    </div>
   </div>
 </div>
 
@@ -86,7 +120,6 @@
       <div class="howto-row"><span class="howto-icon">👥</span><span>Some levels include a <b>companion</b> standing right next to you with their own special twist.</span></div>
       <div class="howto-row"><span class="howto-icon">⚡</span><span>Each character has a <b>Special Move</b> — unlocked in a future update. Watch this space!</span></div>
     </div>
-    <button class="big-btn" id="btn-howto-back">Back</button>
   </section>
 
   <!-- ───────────────────────── MODE SELECT ───────────────────────── -->
@@ -105,48 +138,43 @@
         <div class="mode-card-title">Chaos Mode</div>
         <div class="mode-card-sub">Infinite gas. No suspicion. Just go wild.</div>
       </button>
-      <button class="mode-card mode-card-locked" id="mode-card-custom" data-mode="custom">
-        <div class="mode-card-title">Custom Mode <span class="lock-badge">🔒</span></div>
-        <div class="mode-card-sub">Unlocked at Story Level 30. Set every variable yourself.</div>
+      <button class="mode-card" id="mode-card-custom" data-mode="custom">
+        <div class="mode-card-title">Custom Mode</div>
+        <div class="mode-card-sub">Set every variable yourself. Change anything mid-level too.</div>
       </button>
       <button class="mode-card mode-card-locked" id="mode-card-endless" data-mode="endless">
         <div class="mode-card-title">Endless Mode <span class="lock-badge">🔒</span></div>
         <div class="mode-card-sub">Unlocked at Story Level 30. Difficulty keeps climbing forever.</div>
       </button>
     </div>
-    <button class="big-btn" id="btn-mode-back">Back</button>
   </section>
 
   <!-- ───────────────────────── CHARACTER SELECT ───────────────────────── -->
-  <section id="screen-char-select" class="screen">
+  <section id="screen-char-select" class="screen screen-char-select-layout">
     <h2 class="screen-heading">Choose Your Character</h2>
-    <!-- Stats guide button — opens the stat-info-modal overlay -->
-    <button class="big-btn" id="btn-stat-guide" onclick="document.getElementById('stat-info-modal').style.display='flex'" style="align-self:center;font-size:13px;padding:8px 18px;">ℹ️ Stats Guide</button>
-    <div class="char-grid" id="char-grid"><!-- populated by ui.js from CHARACTERS --></div>
-    <!-- Slots 7–9: placeholder cards for future characters -->
-    <!-- TO ADD CHAR 7-9: add entries to CHARACTERS in data.js and CHARACTER_STATS in charstats.js.
-         These placeholder cards are shown automatically once those entries exist. -->
-    <div id="char-grid-future" class="char-grid-future">
-      <div class="char-card char-card-locked"><div class="char-card-lock">🔒</div><div class="char-card-name">Coming Soon</div><div class="char-card-tagline">Character 7</div></div>
-      <div class="char-card char-card-locked"><div class="char-card-lock">🔒</div><div class="char-card-name">Coming Soon</div><div class="char-card-tagline">Character 8</div></div>
-      <div class="char-card char-card-locked"><div class="char-card-lock">🔒</div><div class="char-card-name">Coming Soon</div><div class="char-card-tagline">Character 9</div></div>
+    <button class="big-btn" id="btn-stat-guide" onclick="document.getElementById('stat-info-modal').style.display='flex'" style="align-self:flex-start;font-size:13px;padding:8px 18px;">ℹ️ Stats Guide</button>
+    <div class="char-select-body">
+      <div class="char-select-left">
+        <div class="char-grid" id="char-grid"><!-- populated by ui.js --></div>
+        <!-- Slots 7–9: now playable — entries needed in data.js / charstats.js.
+             Until art is added they appear with placeholder images via ASSETS fallback. -->
+      </div>
+      <!-- Character stats panel — RIGHT side, shown on hover/focus -->
+      <div id="char-stats-panel" class="char-stats-panel char-stats-panel-right" style="display:none">
+        <div class="csp-title" id="csp-name"></div>
+        <div class="csp-category" id="csp-category"></div>
+        <div class="csp-tagline" id="csp-tagline"></div>
+        <div class="csp-stats" id="csp-stats"></div>
+      </div>
     </div>
-    <!-- Character stats panel — populated by ui.js when a char card is hovered/focused -->
-    <div id="char-stats-panel" class="char-stats-panel" style="display:none">
-      <div class="csp-title" id="csp-name"></div>
-      <div class="csp-category" id="csp-category"></div>
-      <div class="csp-stats" id="csp-stats"></div>
-    </div>
-    <button class="big-btn" id="btn-char-back">Back</button>
   </section>
 
   <!-- ───────────────────────── CUSTOM MODE SETUP ───────────────────────── -->
   <section id="screen-custom-setup" class="screen">
     <h2 class="screen-heading">Custom Mode</h2>
-    <p class="screen-sub">Set every variable yourself, then jump in.</p>
+    <p class="screen-sub" style="margin:0">Set every variable yourself, then jump in. You can also change all of these mid-level.</p>
     <div class="custom-form" id="custom-form"><!-- populated by ui.js --></div>
     <div class="custom-actions">
-      <button class="big-btn" id="btn-custom-back">Back</button>
       <button class="big-btn big-btn-primary" id="btn-custom-start">Start Level</button>
     </div>
   </section>
@@ -160,7 +188,6 @@
     </div>
     <div class="story-stats" id="story-stats"><!-- populated by ui.js --></div>
     <button class="big-btn big-btn-primary" id="btn-story-continue">Continue</button>
-    <button class="big-btn" id="btn-story-back">Back to Modes</button>
   </section>
 
   <!-- ───────────────────────── LEVEL INTRO (VISUAL NOVEL) ───────────────────────── -->
@@ -194,8 +221,15 @@
     </div>
     <div class="complete-stats" id="complete-stats"><!-- populated by ui.js --></div>
     <div id="complete-fart-log" style="width:100%;display:none;"></div>
-    <button class="big-btn big-btn-primary" id="btn-complete-next">Next Level</button>
-    <button class="big-btn" id="btn-complete-menu">Back to Modes</button>
+    <!-- Custom mode: after level complete, choose next action -->
+    <div id="complete-custom-actions" style="display:none;flex-direction:column;gap:10px;width:100%">
+      <button class="big-btn big-btn-primary" id="btn-complete-custom-newlevel">🎮 Create New Level</button>
+      <button class="big-btn" id="btn-complete-custom-menu">Back to Modes</button>
+    </div>
+    <div id="complete-normal-actions" style="display:flex;flex-direction:column;gap:10px;width:100%">
+      <button class="big-btn big-btn-primary" id="btn-complete-next">Next Level</button>
+      <button class="big-btn" id="btn-complete-menu">Back to Modes</button>
+    </div>
   </section>
 
   <!-- ───────────────────────── CAUGHT / FAILURE SCREEN ───────────────────────── -->
@@ -207,6 +241,8 @@
     <div class="complete-stats" id="caught-stats"><!-- populated by ui.js --></div>
     <div id="caught-fart-log" style="width:100%;display:none;"></div>
     <button class="big-btn big-btn-primary" id="btn-caught-retry">Try Again</button>
+    <!-- Custom mode: also show "Change Settings" on failure -->
+    <button class="big-btn" id="btn-caught-changesettings" style="display:none">⚙️ Change Settings</button>
     <button class="big-btn" id="btn-caught-charselect">Change Character</button>
     <button class="big-btn" id="btn-caught-mainmenu">Main Menu</button>
   </section>
@@ -218,6 +254,8 @@
       <div id="hud-top">
         <button id="btn-pause">⏸</button>
         <div id="hud-level-tag" class="hud-level-tag"></div>
+        <!-- Custom mode settings button — shown only in custom mode -->
+        <button id="btn-custom-ingame" style="display:none;background:var(--accent);color:#fff;border:none;border-radius:8px;padding:6px 12px;font-weight:800;cursor:pointer;font-size:13px;" onclick="CUSTOM_PANEL.open()">⚙️</button>
       </div>
 
       <div id="scene">
@@ -288,14 +326,6 @@
 
       <div id="controls">
         <button id="btn-left" style="border-radius:8px 0 0 8px;border-right:none;">← Hold Left</button>
-        <!-- ── SPECIAL MOVE BUTTON ───────────────────────────────────────────────
-             Infrastructure for per-character special moves (future feature).
-             Hidden by default — game.js calls SPECIAL.tryActivate() when pressed.
-             TO ADD A SPECIAL MOVE: define it in CHARACTER_SPECIALS in data.js
-             (each character gets a `special` object with id/label/cooldownMs/fn).
-             The button auto-shows when the active character has a special defined.
-             TO CHANGE BUTTON LOOK: edit #btn-special in css/style.css.
-             ─────────────────────────────────────────────────────────────────── -->
         <button id="btn-special" style="display:none;border-radius:0;border-left:none;border-right:none;background:var(--caution);color:#fff;font-weight:800;" title="Special Move">⚡</button>
         <button id="btn-right" style="border-radius:0 8px 8px 0;border-left:none;">Hold Right →</button>
       </div>

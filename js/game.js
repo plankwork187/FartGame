@@ -42,6 +42,7 @@ const GAME = (() => {
   let lastT = 0;
   let spawnTimer = 0;
   let statusTimer = 0;
+  let statusCooldown = 0; // minimum time before status can change again
 
   let onLevelEnd = null; // callback(result) — set by main.js
 
@@ -243,6 +244,7 @@ const GAME = (() => {
     paused = false;
     spawnTimer = 0;
     statusTimer = 0;
+    statusCooldown = 0;
     ctx.state = {};
 
     NPC_SYSTEM.clear();
@@ -266,6 +268,13 @@ const GAME = (() => {
     setupCompanion();
     setupSpecialButton();
     setupHudVisibility();
+    // Show custom settings ⚙️ button only in custom mode
+    const customIngameBtn = document.getElementById('btn-custom-ingame');
+    if (customIngameBtn) customIngameBtn.style.display = (mode === 'custom') ? '' : 'none';
+    // Reset game-paused state at game start; back button stays visible
+    document.body.classList.remove('game-paused');
+    const backBtn = document.getElementById('back-btn');
+    if (backBtn) backBtn.style.display = '';
     updateSuspicionBar(0);
     updateGasBar();
     updateScore(0);
@@ -415,6 +424,7 @@ const GAME = (() => {
       statusTimer -= dt;
       if (statusTimer <= 0) els.statusMsg.textContent = '';
     }
+    if (statusCooldown > 0) statusCooldown -= dt;
 
     if (mode !== 'chaos') {
       // Passive suspicion decay so a clean stretch slowly cools down.
@@ -550,12 +560,12 @@ const GAME = (() => {
 
     if (!isPuff) {
       const pool = power > 0.7 ? DIALOGUE.chaos : DIALOGUE.release;
-      setStatus(randFrom(mode === 'chaos' ? DIALOGUE.chaos : pool), 1800);
+      setStatus(randFrom(mode === 'chaos' ? DIALOGUE.chaos : pool), 1800, true);
     }
   }
 
   function handleInvoluntary() {
-    setStatus(randFrom(DIALOGUE.involuntary), 1800);
+    setStatus(randFrom(DIALOGUE.involuntary), 1800, true);
     AUDIO.playInvoluntaryFart();
     const envNoise = level.environmentNoise !== undefined ? level.environmentNoise : 0.3;
     // FIX: accidental farts go in a RANDOM direction (not always right).
@@ -651,19 +661,32 @@ const GAME = (() => {
     }
   }
 
+  const NPC_SPEECH_COOLDOWN = 4000; // ms — NPC won't change dialogue more often than this
   function showNpcSpeech(npc, text) {
     const bubble = npc.el.querySelector('.npc-speech');
     if (!bubble) return;
+    const now = performance.now();
+    // Don't update speech bubble if NPC already said something recently
+    if (npc.lastSpeechTime && (now - npc.lastSpeechTime) < NPC_SPEECH_COOLDOWN) return;
+    npc.lastSpeechTime = now;
     bubble.textContent = text;
     bubble.classList.add('visible');
     clearTimeout(npc.speechTimeout);
-    npc.speechTimeout = setTimeout(() => bubble.classList.remove('visible'), 1700);
+    npc.speechTimeout = setTimeout(() => bubble.classList.remove('visible'), 2500);
   }
 
   // ── Status line helper (also used by companion.js via ctx.setStatus) ──
-  function setStatus(text, durationMs = 1500) {
+  // STATUS_MIN_GAP: minimum ms before the status line can change again.
+  // This prevents rapid cycling when NPCs detect clouds during a hold.
+  // Set to 0 for force=true calls (caught, release, involuntary) so
+  // important moments always show. NPC reactions and suspicion lines
+  // respect the cooldown so they don't flash by too fast to read.
+  const STATUS_MIN_GAP = 3500; // ms — dialogue stays readable between changes
+  function setStatus(text, durationMs = 1500, force = false) {
+    if (!force && statusCooldown > 0) return; // respect cooldown
     els.statusMsg.textContent = text;
     statusTimer = durationMs;
+    statusCooldown = STATUS_MIN_GAP;
   }
 
   // ── HUD updates ─────────────────────────────────────────────────────────
@@ -702,7 +725,7 @@ const GAME = (() => {
     running = false;
     PLAYER.stopHold();
     PLAYER.setFace(Math.random() < 0.5 ? 'caught1' : 'caught2', true);
-    setStatus(randFrom(DIALOGUE.caught), 1200);
+    setStatus(randFrom(DIALOGUE.caught), 1200, true);
     const fartSummary = RELEASE_TRACKER.endLevel(false);
     setTimeout(() => finish(buildResult(false, { caught: true, fartSummary })), 700);
   }
@@ -766,14 +789,23 @@ const GAME = (() => {
   function setPaused(p) {
     paused = p;
     if (paused) {
+      document.body.classList.add('game-paused');
+      // Back button is always visible — no change needed here
       PLAYER.stopHold();
       showOverlay('Paused', 'Take a breather. The pressure will still be here.', null);
       els.overlayBtn.textContent = 'Resume';
       els.overlayBtn.onclick = () => { els.overlay.classList.remove('show'); setPaused(false); };
     } else {
+      document.body.classList.remove('game-paused');
+      // Back button stays visible during gameplay
       els.overlay.classList.remove('show');
       lastT = performance.now();
     }
+  }
+
+  // Called by APP.goBack() when paused during gameplay — exits to mode select
+  function exitToMenu() {
+    if (onLevelEnd) finish(lastResultForMenu());
   }
 
   function stop() {
@@ -851,5 +883,7 @@ const GAME = (() => {
   }
 
 
-  return { init, setCallbacks, start, stop };
+  function setPausedPublic(p) { if (running) setPaused(p); }
+
+  return { init, setCallbacks, start, stop, exitToMenu, setPausedPublic };
 })();

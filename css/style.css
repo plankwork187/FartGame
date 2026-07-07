@@ -803,3 +803,249 @@ body.dark-theme .vn-speaker { color: var(--accent); }
 body.dark-theme .sim-box { background: var(--card-bg); }
 body.dark-theme .sim-stat { background: var(--card-bg-soft); }
 body.dark-theme #back-btn { background: var(--card-bg); color: var(--ink); }
+
+/* ============================================================================
+   JULY 7TH EDITS — Override & Enhancement Block
+   All new/changed rules go here so original rules above are easy to compare.
+   ============================================================================ */
+
+/* ── 1. Fix: body/app — no global scroll (screens are self-contained) ─── */
+html, body {
+  height: 100%;
+  overflow: hidden;
+}
+
+#app {
+  height: 100vh;
+  overflow: hidden;
+  padding-top: 56px; /* room for fixed back-btn + theme toggle */
+}
+
+/* Each screen fits in viewport, scrolls only internally if truly needed */
+.screen.screen-active {
+  height: calc(100vh - 56px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 12px 16px 16px;
+  box-sizing: border-box;
+}
+
+/* ── 1b. Back button: always visible (except title), even during game ── */
+#back-btn {
+  display: none; /* JS controls this */
+  z-index: 10001; /* above custom panel */
+}
+
+/* On game screen, back button only shows when paused (game.js adds class) */
+#screen-game.screen-active ~ #back-btn,
+body.game-paused #back-btn { display: block !important; }
+
+/* ── 2. Mode select: compact grid, no scroll needed ─────────────────── */
+.mode-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.mode-card {
+  padding: 12px 14px;
+  min-height: 72px;
+}
+.mode-card-title { font-size: 15px; }
+
+/* ── 3. Character select: left grid + right stats panel side by side ── */
+.screen-char-select-layout {
+  gap: 8px;
+}
+.char-select-body {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  flex: 1;
+  min-height: 0;
+}
+.char-select-left {
+  flex: 1;
+  min-width: 0;
+}
+.char-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 10px;
+}
+.char-card {
+  padding: 10px;
+}
+.char-card img {
+  width: 120px;
+  height: 120px;
+}
+.char-card-name { font-size: 13px; }
+.char-card-tagline { font-size: 10px; }
+
+/* Right-side stats panel — fixed overlay, doesn't affect char grid layout */
+.char-stats-panel-right {
+  position: fixed;
+  top: 54px;
+  right: 12px;
+  width: 240px;
+  max-height: calc(100vh - 70px);
+  overflow-y: auto;
+  z-index: 200;
+  margin: 0;
+  background: var(--card-bg);
+  border: 2.5px solid var(--accent);
+  border-radius: 16px;
+  padding: 14px 16px 16px;
+  box-shadow: 0 6px 28px rgba(0,0,0,0.22);
+  display: none; /* shown by JS */
+}
+.char-stats-panel-right.visible { display: block !important; }
+
+.csp-title {
+  font-size: 20px;
+  font-weight: 800;
+}
+.csp-tagline {
+  font-size: 11px;
+  color: var(--ink-soft);
+  margin-bottom: 12px;
+  line-height: 1.4;
+  font-style: italic;
+}
+.csp-stat-row {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  margin-bottom: 10px;
+}
+.csp-stat-label {
+  width: auto;
+  font-size: 14px;
+}
+.csp-stat-dots {
+  gap: 5px;
+}
+.csp-dot {
+  font-size: 18px;
+}
+.csp-dot-on {
+  color: var(--accent);
+}
+.csp-stat-tip {
+  font-size: 11px;
+  line-height: 1.4;
+}
+/* Descriptive stat rating label */
+.csp-stat-rating {
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+/* Remove old bottom-positioned panel */
+.char-stats-panel:not(.char-stats-panel-right) {
+  display: none !important;
+}
+
+/* ── 4. Custom mode: compact form to avoid scroll ────────────────────── */
+.custom-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.custom-field {
+  padding: 8px 10px;
+}
+.custom-section-header {
+  grid-column: 1 / -1;
+  margin: 4px 0 0;
+  padding-top: 6px;
+}
+.custom-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  padding-top: 4px;
+}
+
+/* ── 5. Custom in-game settings panel ────────────────────────────────── */
+#custom-ingame-panel {
+  position: fixed;
+  inset: 0;
+  z-index: 10500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+#custom-ingame-box {
+  max-height: 85vh;
+  overflow-y: auto;
+  width: 100%;
+  max-width: 500px;
+}
+#custom-ingame-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+#custom-ingame-form .custom-field {
+  padding: 8px 10px;
+}
+#custom-ingame-form .custom-section-header {
+  grid-column: 1 / -1;
+}
+
+/* ── 6. Game screen: ensure proper layout, no overflow ──────────────── */
+#screen-game.screen-active {
+  padding: 0;
+  overflow: hidden;
+  height: 100vh;
+}
+#game {
+  height: 100%;
+  overflow: hidden;
+}
+
+/* ── Story map: compact ──────────────────────────────────────────────── */
+#screen-story-map .story-stats {
+  gap: 8px;
+}
+
+/* ── Level complete: compact ─────────────────────────────────────────── */
+#screen-level-complete .complete-stats,
+#screen-caught .complete-stats {
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+}
+
+/* ── HUD top: flex row with custom settings btn ──────────────────────── */
+#hud-top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+#hud-level-tag { flex: 1; }
+
+/* ── Future-char grid removed (chars 7-9 now in main char-grid) ────── */
+.char-grid-future { display: none; }
+
+/* ── Dark mode updates ──────────────────────────────────────────────── */
+body.dark-theme .char-stats-panel-right {
+  background: var(--card-bg);
+  border-color: var(--accent);
+}
+
+/* ── Mobile tweaks ───────────────────────────────────────────────────── */
+@media (max-width: 600px) {
+  .char-stats-panel-right {
+    width: calc(100vw - 24px);
+    right: 12px;
+    top: 50px;
+  }
+  .mode-grid { grid-template-columns: 1fr; }
+  .custom-form, #custom-ingame-form { grid-template-columns: 1fr; }
+}

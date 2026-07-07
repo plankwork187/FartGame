@@ -126,37 +126,34 @@ const CHAR_STATS = (() => {
       volume:    3,
     },
 
-    // ── FUTURE CHARACTERS (7–9) ───────────────────────────────────────────────
-    // TO ADD CHARACTER 7: uncomment and fill in the block below, then add a
-    // matching entry in CHARACTERS (data.js). The character will then appear
-    // on the character select screen automatically (replacing the "Coming Soon" slot).
-    //
-    // char7: {
-    //   sizeCategory: 'medium',   // petite / medium / voluptuous
-    //   smell:     3,
-    //   linger:    3,
-    //   accident:  3,
-    //   frequency: 3,
-    //   volume:    3,
-    // },
-    //
-    // char8: {
-    //   sizeCategory: 'medium',
-    //   smell:     3,
-    //   linger:    3,
-    //   accident:  3,
-    //   frequency: 3,
-    //   volume:    3,
-    // },
-    //
-    // char9: {
-    //   sizeCategory: 'medium',
-    //   smell:     3,
-    //   linger:    3,
-    //   accident:  3,
-    //   frequency: 3,
-    //   volume:    3,
-    // },
+    // ── CHARACTERS 7–9 (now playable) ──────────────────────────────────────────
+    // TO TUNE: change any stat 1–5. Remember: higher = harder for every stat.
+    char7: {
+      sizeCategory: 'petite',
+      smell:     2,   // subtle but present
+      linger:    1,   // clouds vanish quickly
+      accident:  4,   // loses control more than she'd like to admit
+      frequency: 3,   // steady build-up
+      volume:    4,   // louder than expected
+    },
+
+    char8: {
+      sizeCategory: 'medium',
+      smell:     5,   // absolutely pungent
+      linger:    3,   // hangs around
+      accident:  2,   // decent control
+      frequency: 1,   // slow build — rare but powerful
+      volume:    2,   // quiet
+    },
+
+    char9: {
+      sizeCategory: 'voluptuous',
+      smell:     3,
+      linger:    4,   // social situations make it worse
+      accident:  3,
+      frequency: 4,   // always in a rush = always gassy
+      volume:    3,
+    },
   };
 
   // ── Active session stats ─────────────────────────────────────────────────
@@ -206,23 +203,30 @@ const CHAR_STATS = (() => {
   function getFrequencyMult() { return statMult((active || defaultStats()).frequency); }
 
   /**
-   * Returns the gas level at which an involuntary fart fires, adjusted for
-   * the character's `accident` stat (HIGHER accident = fires earlier = harder).
-   *   accident 1 (near-perfect) → threshold 120 (almost never triggers)
-   *   accident 3 (neutral)      → threshold 100 (default behaviour)
-   *   accident 5 (clumsy)       → threshold  70 (fires very often)
-   *
-   * TO CHANGE HOW OFTEN ACCIDENTS HAPPEN:
-   *   Adjust the formula below. Lower threshold = more accidents.
-   *   accident 1 → 120, accident 3 → 100, accident 5 → 70
+   * Returns the gas level at which an involuntary fart fires.
+   * Always returns 100 — accidents only fire when the bar is COMPLETELY full.
+   * The accident stat instead controls how fast the bar fills near the top
+   * (see getAccidentEndAccelMult below).
    */
   function getInvoluntaryThreshold() {
+    return 100; // always full bar — no early accidents
+  }
+
+  /**
+   * Returns a multiplier for how fast the gas bar fills in the 80–100 zone.
+   * High accident stat = fills faster near top (accidents fire sooner after 100).
+   * Low accident stat = fills slower near top (accidents rarely trigger).
+   *   accident 1 → 0.30 (very slow near top — almost never hits 100)
+   *   accident 3 → 1.00 (neutral)
+   *   accident 5 → 2.50 (rushes to 100 — accidents fire quickly)
+   *
+   * TO TUNE: adjust the return values below.
+   */
+  function getAccidentEndAccelMult() {
     const s = (active || defaultStats()).accident;
-    // accident 1 → 120, accident 3 → 100, accident 5 → 70
-    // Lower segment (1-3): step of -10 per point → 120, 110, 100
-    // Upper segment (3-5): step of -15 per point → 100, 85, 70
-    if (s <= 3) return 120 - (s - 1) * 10;
-    return 100 - (s - 3) * 15;
+    // accident 1→0.30, 2→0.60, 3→1.00, 4→1.70, 5→2.50
+    const table = [0.30, 0.60, 1.00, 1.70, 2.50];
+    return table[Math.min(4, Math.max(0, Math.round(s) - 1))];
   }
 
   /**
@@ -251,10 +255,13 @@ const CHAR_STATS = (() => {
       PLAYER.setStatFrequencyMult(getFrequencyMult());
     }
     if (typeof PLAYER.setInvoluntaryThreshold === 'function') {
-      PLAYER.setInvoluntaryThreshold(getInvoluntaryThreshold());
+      PLAYER.setInvoluntaryThreshold(getInvoluntaryThreshold()); // always 100
     }
     if (typeof PLAYER.setAccidentGasRelease === 'function') {
       PLAYER.setAccidentGasRelease(getAccidentGasRelease());
+    }
+    if (typeof PLAYER.setAccidentEndAccelMult === 'function') {
+      PLAYER.setAccidentEndAccelMult(getAccidentEndAccelMult());
     }
   }
 
@@ -270,6 +277,7 @@ const CHAR_STATS = (() => {
     getFrequencyMult,
     getInvoluntaryThreshold,
     getAccidentGasRelease,
+    getAccidentEndAccelMult,
     applyToPlayer,
     statMult,
   };

@@ -19,8 +19,9 @@ const PLAYER = (() => {
   let gas = 40;
   let gasFillRate = 0.010;   // overridden per-level via setGasPressureLevel
   let statFrequencyMult = 1.0;   // from CHAR_STATS — scales fill rate
-  let involuntaryThreshold = 100; // from CHAR_STATS — gas level that triggers accidental fart
+  let involuntaryThreshold = 100; // always 100 — accidents only fire when bar is FULL
   let accidentGasRelease = 25;     // from CHAR_STATS — how much gas drains on an accident
+  let accidentEndAccelMult = 1.0;  // from CHAR_STATS — how much faster/slower fill rate is near top
   let onRelease = null;      // callback(power) set by game.js
   let onInvoluntary = null;  // callback() set by game.js
   let suspendedByCut = false;
@@ -47,9 +48,13 @@ const PLAYER = (() => {
   // the character's frequency stat (stat 5 = 55% faster, stat 1 = 40% slower).
   function setStatFrequencyMult(mult) { statFrequencyMult = mult || 1.0; }
 
-  // Called by CHAR_STATS.applyToPlayer() — low control characters fart
-  // accidentally at a lower gas level (e.g. 80 instead of 100).
-  function setInvoluntaryThreshold(threshold) { involuntaryThreshold = threshold || 100; }
+  // Threshold is always 100 — accidents only fire when the bar is completely full.
+  // The accident stat instead affects how fast the bar fills near the top.
+  function setInvoluntaryThreshold(threshold) { involuntaryThreshold = 100; } // always full bar
+
+  // Called by CHAR_STATS.applyToPlayer() — accident stat sets end-of-bar acceleration.
+  // High accident = fills faster near top (>1.0). Low accident = fills slower near top (<1.0).
+  function setAccidentEndAccelMult(mult) { accidentEndAccelMult = mult || 1.0; }
 
   // Called by CHAR_STATS.applyToPlayer() — higher accident stat releases more gas on accidents.
   function setAccidentGasRelease(amount) { accidentGasRelease = amount || 25; }
@@ -216,20 +221,28 @@ const PLAYER = (() => {
         if (onRelease) onRelease(holdPower, true); // true = "mid-hold puff", not a full release
       }
     } else {
-      // Two-stage passive refill curve: faster through the first half of
-      // the meter (0-50) so it's easy to get enough gas to release a
-      // fart, then progressively slower through the second half (50-100)
-      // so it's harder to accidentally fill all the way up and trigger an
-      // involuntary release. FIRST_HALF_MULT/SECOND_HALF_MIN_MULT tune how
-      // pronounced each stage is relative to the base gasFillRate.
-      const FIRST_HALF_MULT = 1.35;     // speed multiplier while gas < 50
-      const SECOND_HALF_MIN_MULT = 0.35; // multiplier gas approaches as it nears 100
+      // Three-stage passive refill curve:
+      //   0-50:  faster fill (easy to get fart-ready)
+      //   50-80: standard rate
+      //   80-100: accident stat controls speed here — high accident accelerates
+      //           toward full so accidents fire sooner; low accident slows down
+      //           so accidents almost never trigger. Bar always fills to 100 before
+      //           any involuntary release fires (threshold is always 100).
+      const FIRST_HALF_MULT = 1.35;       // speed multiplier while gas < 50
+      const BASE_SECOND_HALF_MIN = 0.35;  // base slowdown as gas approaches 80
+      // End-zone (80-100): accident stat scales from slow (low) to fast (high)
+      // accidentEndAccelMult: <1 = slower near top, >1 = faster near top
       let rateMult;
       if (gas < 50) {
         rateMult = FIRST_HALF_MULT;
+      } else if (gas < 80) {
+        const t = clamp((gas - 50) / 30, 0, 1); // 0 at gas=50, 1 at gas=80
+        rateMult = lerp(1.0, BASE_SECOND_HALF_MIN, t);
       } else {
-        const t = clamp((gas - 50) / 50, 0, 1); // 0 at gas=50, 1 at gas=100
-        rateMult = lerp(1, SECOND_HALF_MIN_MULT, t);
+        // End zone: accident stat accelerates or slows fill rate
+        const t = clamp((gas - 80) / 20, 0, 1); // 0 at gas=80, 1 at gas=100
+        const baseEnd = lerp(BASE_SECOND_HALF_MIN, BASE_SECOND_HALF_MIN * 0.5, t);
+        rateMult = baseEnd * accidentEndAccelMult;
       }
       gas = Math.min(100, gas + dt * gasFillRate * rateMult * statFrequencyMult);
     }
@@ -254,6 +267,6 @@ const PLAYER = (() => {
     init, setCharacter, setGasPressureLevel, setChaosMode, setCallbacks, reset,
     startHold, stopHold, isHolding, getGas, getHoldPower, getHoldDir, update,
     setFace, updateIdleFace,
-    setStatFrequencyMult, setInvoluntaryThreshold, setAccidentGasRelease,
+    setStatFrequencyMult, setInvoluntaryThreshold, setAccidentGasRelease, setAccidentEndAccelMult,
   };
 })();
