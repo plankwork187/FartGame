@@ -112,6 +112,12 @@ const APP = (() => {
     } else {
       btn.style.display = '';
     }
+    // Show/hide the permanent in-game Mode + Char buttons
+    if (screenId === 'screen-game') {
+      document.body.classList.add('ingame-nav-visible');
+    } else {
+      document.body.classList.remove('ingame-nav-visible');
+    }
   }
 
   // Back button click — works from any non-title screen.
@@ -507,3 +513,53 @@ const CUSTOM_PANEL = (() => {
 document.addEventListener('DOMContentLoaded', () => {
   APP.init();
 });
+
+/* ============================================================================
+   INGAME_NAV — handlers for the permanent in-game navigation buttons
+   ============================================================================
+   These are called by the Mode Select (🎮) and Character Select (👤) buttons
+   that appear in the top-right corner during gameplay.
+
+   goModeSelect() — stops the current game and goes to mode select.
+   goCharSelect()  — stops the current game and goes to character select for
+                     the same mode, so the player can swap characters and
+                     immediately restart from character select.
+
+   Modes where character can NOT be changed (none currently, but you can add
+   them to the CHAR_LOCKED_MODES set below) will auto-hide the 👤 button.
+   ============================================================================ */
+const INGAME_NAV = (() => {
+  // Add mode ids here if you ever want to prevent character switching mid-game
+  const CHAR_LOCKED_MODES = new Set([]);
+
+  function updateCharBtnVisibility(modeId) {
+    if (CHAR_LOCKED_MODES.has(modeId)) {
+      document.body.classList.add('ingame-char-hidden');
+    } else {
+      document.body.classList.remove('ingame-char-hidden');
+    }
+  }
+
+  // Called whenever a new game starts — updates char-button visibility.
+  function onGameStart(modeId) {
+    updateCharBtnVisibility(modeId);
+  }
+
+  // 🎮 Mode Select button — stop game, go to mode select screen.
+  function goModeSelect() {
+    GAME.stop && GAME.stop();
+    document.body.classList.remove('ingame-nav-visible');
+    UI.showScreen('screen-mode-select');
+  }
+
+  // 👤 Character button — stop game, go to character select (same mode).
+  // Player picks a new character and the normal flow restarts from there.
+  function goCharSelect() {
+    GAME.stop && GAME.stop();
+    document.body.classList.remove('ingame-nav-visible');
+    APP.goBack(); // goBack from game screen already routes to character select
+  }
+
+  return { onGameStart, goModeSelect, goCharSelect };
+})();
+

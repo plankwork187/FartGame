@@ -7,7 +7,7 @@
    SIZE CATEGORIES (affects how characters look in future art passes):
      petite     — Ariana, Sabrina
      medium     — Olivia, Madelyn
-     voluptuous — Beyoncé, char6
+     voluptuous — Beyoncé, Bryce
 
    THE FIVE STATS (all 1–5 — HIGHER IS ALWAYS HARDER):
    ┌──────────────┬──────────────────────────────────────────────────────────┐
@@ -117,7 +117,7 @@ const CHAR_STATS = (() => {
       volume:    5,
     },
 
-    char6: {
+    'bryce': {
       sizeCategory: 'voluptuous',
       smell:     3,
       linger:    3,

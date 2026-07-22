@@ -14,8 +14,8 @@
         Image() probe — after the first check, the result is reused.
 
    TO ADD REAL ART LATER:
-     Just put PNGs at the paths referenced in data.js (e.g.
-     "images/characters/stevie_body.png") and they will automatically be
+     Just put WebPs at the paths referenced in data.js (e.g.
+     "images/characters/stevie_body.webp") and they will automatically be
      used instead of the placeholder — no code changes needed anywhere.
 
    The base folder for all image paths is IMAGE_BASE below.
@@ -47,7 +47,7 @@ const ASSETS = (() => {
   }
 
   // Produces a short readable label from a path, e.g.
-  // "characters/stevie_lean1.png" -> "stevie lean1"
+  // "characters/stevie_lean1.webp" -> "stevie lean1"
   function labelFor(path) {
     const file = path.split('/').pop().replace(/\.[a-z0-9]+$/i, '');
     return file.replace(/_/g, ' ');

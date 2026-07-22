@@ -60,59 +60,80 @@ const UI = (() => {
   }
 
   // ── Character select ────────────────────────────────────────────────
-  function populateCharacterSelect(onChosen) {
-    onCharacterChosen = onChosen;
-    const grid = byId('char-grid');
-    grid.innerHTML = '';
-    // Hide stat panel initially
-    const panel = byId('char-stats-panel');
-    if (panel) { panel.style.display = 'none'; panel.classList.remove('visible'); }
 
-    Object.values(CHARACTERS).forEach(ch => {
-      const card = document.createElement('div');
-      card.className = 'char-card';
-      const img = document.createElement('img');
-      ASSETS.applyTo(img, ch.profile);
-      const name = document.createElement('div');
-      name.className = 'char-card-name';
-      name.textContent = ch.name;
-      const tagline = document.createElement('div');
-      tagline.className = 'char-card-tagline';
-      tagline.textContent = ch.tagline;
-      card.append(img, name, tagline);
-      // Show stat panel on hover/focus — right side
-      card.addEventListener('mouseenter', () => showCharStatPanel(ch));
-      card.addEventListener('focus',      () => showCharStatPanel(ch));
-      card.addEventListener('touchstart', (e) => { e.preventDefault(); showCharStatPanel(ch); }, { passive: false });
-      card.onclick = () => { if (onCharacterChosen) onCharacterChosen(ch.id); };
-      grid.appendChild(card);
-    });
-    showScreen('screen-char-select');
-  }
+  // Unique flavor text shown in each character's dropdown panel
+  const CHAR_FLAVOR = {
+    sabrina:   "She'll have the whole place guessing — and giggling. Nobody suspects the girl who looks this put-together. High gas frequency means she's always loaded and ready to fire, and when she does, it's LOUD. Choose her if you like living dangerously.",
+    olivia:    "Once she starts, she doesn't stop. Olivia's clouds linger like an unresolved argument — long after she's moved on, NPCs are still walking through her legacy. Low smell but maximum staying power. Perfect for the patient schemer.",
+    ariana:    "Tiny but absolutely lethal. Ariana's top-tier smell will clear a room, and her near-perfect control means she releases only when SHE decides. The most feared silent assassin in the game.",
+    'beyoncé': "Cool on the surface, absolute chaos underneath. Great smell and huge volume, but accident-prone — she might just go off at the worst moment. High risk, high reward. For players who like to live dangerously.",
+    madelyn:   "A walking natural disaster who somehow owns it every time. Wild card accident rating keeps things interesting. Choose her for maximum unpredictability and big laugh moments.",
+    bryce:     "Perfectly balanced across every stat, which means perfectly balanced chaos. The reliable all-rounder. Great for learning the game without extreme penalties.",
+    char7:     "Quiet doesn't mean harmless. Barely registers on the smell scale, and clouds vanish fast — in and out before anyone pins it on her. High accident rate is the catch. Stealth mode, but chaotic.",
+    char8:     "Maximum pungency, minimum noise. When char8 finally lets one rip (rare — slow build), the smell is absolutely nuclear. Quiet as a library. Deadly as a gas leak. The long game specialist.",
+    char9:     "Always surrounded by people, always gassy. Steady gas build-up and lingering clouds make social situations extremely risky. Accident rate is average — which means it'll still happen at the worst possible time.",
+  };
 
-  // Descriptive rating labels per stat level — fart-flavored and informative
+  // Descriptive rating labels per stat level
   const STAT_RATINGS = {
     smell:     ['Barely a whiff', 'Mild crop dust', 'Silent but present', 'Rancid SBD territory', '☠️ Biological hazard'],
-    linger:    ['Gone in seconds', 'Brief awkwardness', 'Hangs around like a bad decision', 'Won\'t leave the room — pure SBD', 'Eternal crop dust. No escape.'],
+    linger:    ['Gone in seconds', 'Brief awkwardness', 'Hangs around like a bad decision', "Won't leave the room — pure SBD", 'Eternal crop dust. No escape.'],
     accident:  ['Iron sphincter — zero accidents', 'Solid control, rare slip', 'Occasional involuntary BRAPs', 'Cut the cheese at will — chaos machine', 'Accidental SBDs constantly. You are NOT in charge.'],
     frequency: ['Slow build — rare gassiness', 'Steady crop-dusting pressure', '💨 Constant gassiness — no breaks', 'Relentless BRAPs incoming', 'Maximum gassiness. Release or bust.'],
     volume:    ['Silent but Deadly — whisper quiet', 'Audible SBD — neighbors notice', 'Loud BRAPs — hard to ignore', 'Very loud — wet and rancid', '🔊 Maximum volume — heard across the room'],
   };
 
-  // Renders the character stat panel on the RIGHT side of the char select screen
-  function showCharStatPanel(ch) {
-    const panel = byId('char-stats-panel');
-    if (!panel) return;
+  function closeAllDropdowns() {
+    document.querySelectorAll('.char-dropdown-panel.open').forEach(d => d.classList.remove('open'));
+    document.querySelectorAll('.char-card.selected').forEach(c => c.classList.remove('selected'));
+  }
+
+  // Builds the dropdown stats panel DOM for a character
+  function buildCharDropdown(ch, dropId) {
+    const drop = document.createElement('div');
+    drop.className = 'char-dropdown-panel';
+    drop.id = dropId;
+    drop.addEventListener('click', e => e.stopPropagation());
+
     const stats = (typeof CHAR_STATS !== 'undefined') ? CHAR_STATS.getAllStats() : {};
     const charKey = ch.id || '';
     const s = stats[charKey] || stats[charKey.toLowerCase()] ||
               Object.entries(stats).find(([k]) => k.toLowerCase() === charKey.toLowerCase())?.[1] || null;
 
-    byId('csp-name').textContent = ch.name;
-    byId('csp-category').textContent = s ? ('📐 ' + s.sizeCategory.charAt(0).toUpperCase() + s.sizeCategory.slice(1)) : '';
-    const taglineEl = byId('csp-tagline');
-    if (taglineEl) taglineEl.textContent = ch.tagline || '';
+    // Header: name + select button
+    const header = document.createElement('div');
+    header.className = 'char-dropdown-header';
+    const titleWrap = document.createElement('div');
+    const titleEl = document.createElement('div');
+    titleEl.className = 'csp-title';
+    titleEl.textContent = ch.name;
+    const catEl = document.createElement('div');
+    catEl.className = 'csp-category';
+    catEl.textContent = s ? ('📐 ' + s.sizeCategory.charAt(0).toUpperCase() + s.sizeCategory.slice(1)) : '';
+    titleWrap.append(titleEl, catEl);
 
+    const selectBtn = document.createElement('button');
+    selectBtn.className = 'char-dropdown-select-btn';
+    selectBtn.textContent = '▶ Play as ' + ch.name.split(' ')[0];
+    selectBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      closeAllDropdowns();
+      if (onCharacterChosen) onCharacterChosen(ch.id);
+    });
+    header.append(titleWrap, selectBtn);
+    drop.appendChild(header);
+
+    // Flavor text
+    const flavorKey = charKey.toLowerCase();
+    const flavorText = CHAR_FLAVOR[flavorKey] || CHAR_FLAVOR[ch.id] || ch.personality || ch.tagline || '';
+    if (flavorText) {
+      const flavor = document.createElement('div');
+      flavor.className = 'char-dropdown-flavor';
+      flavor.textContent = flavorText;
+      drop.appendChild(flavor);
+    }
+
+    // Stats
     const stDefs = [
       { key: 'smell',     label: '💨 Smell',     tip: 'Cloud size & detection radius' },
       { key: 'linger',    label: '⏱ Linger',    tip: 'How long clouds hang around' },
@@ -120,13 +141,14 @@ const UI = (() => {
       { key: 'frequency', label: '⚡ Frequency', tip: 'How fast gas builds up' },
       { key: 'volume',    label: '🔊 Volume',    tip: 'Loudness & sound detection' },
     ];
-    const stEl = byId('csp-stats');
-    stEl.innerHTML = '';
+    const stEl = document.createElement('div');
+    stEl.className = 'csp-stats';
     stDefs.forEach(def => {
       const val = s ? (s[def.key] != null ? Math.round(s[def.key]) : 0) : 0;
       const row = document.createElement('div');
       row.className = 'csp-stat-row';
-      const dots = Array.from({length:5}, (_,i) => `<span class="csp-dot${i < val ? ' csp-dot-on' : ''}">${i < val ? '●' : '○'}</span>`).join('');
+      const dots = Array.from({length:5}, (_,i) =>
+        `<span class="csp-dot${i < val ? ' csp-dot-on' : ''}">${i < val ? '●' : '○'}</span>`).join('');
       const ratingText = val > 0 ? (STAT_RATINGS[def.key][val - 1] || '') : '—';
       row.innerHTML = `
         <div style="display:flex;align-items:center;gap:8px;">
@@ -137,9 +159,75 @@ const UI = (() => {
         <span class="csp-stat-tip">${def.tip}</span>`;
       stEl.appendChild(row);
     });
-    panel.classList.add('visible');
-    panel.style.display = 'block';
+    drop.appendChild(stEl);
+    return drop;
   }
+
+  function populateCharacterSelect(onChosen) {
+    onCharacterChosen = onChosen;
+    const grid = byId('char-grid');
+    grid.innerHTML = '';
+
+    // Hide legacy panel if it still exists in the DOM
+    const oldPanel = byId('char-stats-panel');
+    if (oldPanel) oldPanel.style.display = 'none';
+
+    Object.values(CHARACTERS).forEach(ch => {
+      const card = document.createElement('div');
+      card.className = 'char-card';
+      card.tabIndex = 0;
+      card.dataset.charId = ch.id;
+
+      const img = document.createElement('img');
+      ASSETS.applyTo(img, ch.profile);
+      img.alt = ch.name;
+
+      const name = document.createElement('div');
+      name.className = 'char-card-name';
+      name.textContent = ch.name;
+
+      const tagline = document.createElement('div');
+      tagline.className = 'char-card-tagline';
+      tagline.textContent = ch.tagline;
+
+      card.append(img, name, tagline);
+
+      // Click toggles the inline dropdown below this card
+      card.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const dropId = 'char-drop-' + ch.id;
+        const existingDrop = byId(dropId);
+
+        if (existingDrop && existingDrop.classList.contains('open')) {
+          // Same card tapped again — close
+          existingDrop.classList.remove('open');
+          card.classList.remove('selected');
+        } else {
+          // Close any currently open dropdown
+          closeAllDropdowns();
+          if (existingDrop) {
+            existingDrop.classList.add('open');
+          } else {
+            const drop = buildCharDropdown(ch, dropId);
+            card.after(drop);
+            drop.offsetHeight; // force reflow for CSS animation
+            drop.classList.add('open');
+          }
+          card.classList.add('selected');
+        }
+      });
+
+      grid.appendChild(card);
+    });
+
+    // Tap outside to close all dropdowns
+    document.addEventListener('click', closeAllDropdowns);
+
+    showScreen('screen-char-select');
+  }
+
+  // Legacy stub — kept so nothing external breaks if called
+  function showCharStatPanel(ch) {}
 
   // ── Custom Mode setup form ──────────────────────────────────────────
   function populateCustomSetup(onStart) {

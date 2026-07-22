@@ -38,6 +38,35 @@
   --radius-lg: 20px;
   --radius-md: 14px;
   --radius-sm: 9px;
+
+  /* ══════════════════════════════════════════════════════════════════
+     BUTTON SIZE CONTROLS — edit these two sections to resize buttons.
+     Changes here apply instantly everywhere. No hunting through code.
+     ══════════════════════════════════════════════════════════════════
+
+     MODE SELECT CARDS (Story, Stealth, Chaos, Custom, Endless)
+     --------------------------------------------------------- */
+  --mode-card-padding-v:   16px;   /* top/bottom padding inside each card — bigger = taller card */
+  --mode-card-padding-h:   18px;   /* left/right padding inside each card */
+  --mode-card-min-height:  88px;   /* minimum card height in pixels */
+  --mode-card-title-size:  17px;   /* font size of the mode name */
+  --mode-card-sub-size:    13px;   /* font size of the subtitle/description */
+  --mode-card-gap:         12px;   /* gap between cards in the grid */
+
+  /* CHARACTER SELECT CARDS
+     --------------------------------------------------------- */
+  --char-card-padding:     10px;   /* padding inside each character card */
+  --char-card-img-size:    120px;  /* width AND height of the character portrait */
+  --char-card-name-size:   13px;   /* font size of the character name */
+  --char-card-tagline-size:10px;   /* font size of the character tagline */
+  --char-card-gap:         10px;   /* gap between character cards */
+
+  /* GENERAL / TITLE-SCREEN BUTTONS (Play, How To Play, etc.)
+     --------------------------------------------------------- */
+  --big-btn-font-size:     17px;   /* font size of big menu buttons */
+  --big-btn-padding-v:     16px;   /* top/bottom padding of big buttons */
+  --big-btn-padding-h:     20px;   /* left/right padding of big buttons */
+  /* ══════════════════════════════════════════════════════════════════ */
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -163,8 +192,8 @@ body.dark-theme .custom-select {
 .big-btn {
   font-family: var(--font-body);
   font-weight: 700;
-  font-size: 16px;
-  padding: 14px 18px;
+  font-size: var(--big-btn-font-size);
+  padding: var(--big-btn-padding-v) var(--big-btn-padding-h);
   border-radius: var(--radius-md);
   border: 1.5px solid var(--border-soft);
   background: var(--card-bg);
@@ -266,8 +295,8 @@ body.dark-theme .custom-select {
 }
 .mode-card:active { transform: scale(0.98); }
 .mode-card:hover { border-color: var(--accent); }
-.mode-card-title { font-family: var(--font-display); font-weight: 700; font-size: 17px; }
-.mode-card-sub { font-size: 12.5px; color: var(--ink-soft); margin-top: 3px; }
+.mode-card-title { font-family: var(--font-display); font-weight: 700; font-size: var(--mode-card-title-size); }
+.mode-card-sub { font-size: var(--mode-card-sub-size); color: var(--ink-soft); margin-top: 3px; }
 .mode-card-locked { opacity: 0.55; cursor: not-allowed; }
 .mode-card-locked:hover { border-color: var(--border-soft); }
 .lock-badge { font-size: 13px; }
@@ -283,16 +312,16 @@ body.dark-theme .custom-select {
   background: var(--card-bg);
   border: 1.5px solid var(--border-soft);
   border-radius: var(--radius-md);
-  padding: 14px;
+  padding: var(--char-card-padding);
   text-align: center;
   cursor: pointer;
   transition: transform 0.12s, border-color 0.15s;
 }
 .char-card:active { transform: scale(0.97); }
 .char-card.selected { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent) inset; }
-.char-card img { width: 160px; height: 160px; object-fit: contain; border-radius: 12px; background: var(--card-bg-soft); }
-.char-card-name { font-family: var(--font-display); font-weight: 700; font-size: 15px; margin-top: 8px; }
-.char-card-tagline { font-size: 11px; color: var(--ink-soft); margin-top: 2px; line-height: 1.3; }
+.char-card img { width: var(--char-card-img-size); height: var(--char-card-img-size); object-fit: contain; border-radius: 12px; background: var(--card-bg-soft); }
+.char-card-name { font-family: var(--font-display); font-weight: 700; font-size: var(--char-card-name-size); margin-top: 8px; }
+.char-card-tagline { font-size: var(--char-card-tagline-size); color: var(--ink-soft); margin-top: 2px; line-height: 1.3; }
 
 /* ============================================================
    CUSTOM MODE SETUP FORM
@@ -513,7 +542,7 @@ body.dark-theme .vn-speaker { color: var(--accent); }
 .npc-D .npc-head { background: #8B4513; } .npc-D .npc-body { background: #CC4400; } .npc-D .npc-leg { background: #333; }
 
 #facecam {
-  position: absolute; top: 10px; right: 10px; width: 130px; height: 130px;
+  position: absolute; top: 10px; right: 10px; width: 150px; height: 150px;
   border: 2.5px solid rgba(255,255,255,0.7); border-radius: 12px; overflow: hidden;
   z-index: 10; background: var(--card-bg-soft); box-shadow: 0 2px 8px rgba(0,0,0,0.25);
 }
@@ -552,6 +581,17 @@ body.dark-theme .vn-speaker { color: var(--accent); }
 #controls button:active, #controls button.held { background: var(--accent); color: #fff; border-color: var(--accent-deep); transform: scale(0.98); }
 
 #status-msg { text-align: center; font-size: 12px; color: var(--ink-soft); margin-top: 6px; min-height: 16px; font-style: italic; }
+
+.anim-style-btn {
+  padding: 4px 10px; font-size: 11px; font-weight: 700; cursor: pointer;
+  border-radius: 6px; border: 1.5px solid var(--border-soft);
+  background: var(--card-bg); color: var(--ink-soft);
+  transition: background 0.12s, color 0.12s, border-color 0.12s;
+  touch-action: manipulation;
+}
+.anim-style-btn.anim-style-active {
+  background: var(--accent); color: #fff; border-color: var(--accent-deep);
+}
 
 #overlay {
   display: none; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
@@ -832,121 +872,158 @@ html, body {
 
 /* ── 1b. Back button: always visible (except title), even during game ── */
 #back-btn {
-  display: none; /* JS controls this */
+  display: none; /* JS controls this — shown on all screens except title */
   z-index: 10001; /* above custom panel */
 }
 
-/* On game screen, back button only shows when paused (game.js adds class) */
-#screen-game.screen-active ~ #back-btn,
-body.game-paused #back-btn { display: block !important; }
+/* On game screen: back button is ALWAYS visible (not just when paused) */
+#screen-game.screen-active ~ #back-btn { display: block !important; }
 
 /* ── 2. Mode select: compact grid, no scroll needed ─────────────────── */
 .mode-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 10px;
+  gap: var(--mode-card-gap);
 }
 .mode-card {
-  padding: 12px 14px;
-  min-height: 72px;
+  padding: var(--mode-card-padding-v) var(--mode-card-padding-h);
+  min-height: var(--mode-card-min-height);
 }
-.mode-card-title { font-size: 15px; }
+.mode-card-title { font-size: var(--mode-card-title-size); }
 
-/* ── 3. Character select: left grid + right stats panel side by side ── */
+/* ── 3. Character select: grid with inline dropdown panels ── */
 .screen-char-select-layout {
   gap: 8px;
 }
 .char-select-body {
-  display: flex;
-  gap: 16px;
-  align-items: flex-start;
+  display: block;
   flex: 1;
   min-height: 0;
+  overflow-y: auto;
 }
 .char-select-left {
-  flex: 1;
-  min-width: 0;
+  width: 100%;
 }
+/* Grid: 3 columns on mobile, more on wider screens */
 .char-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-  gap: 10px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--char-card-gap);
+  align-items: start;
 }
 .char-card {
-  padding: 10px;
+  padding: var(--char-card-padding);
+  cursor: pointer;
+  position: relative;
 }
 .char-card img {
-  width: 120px;
-  height: 120px;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1 / 1;
+  object-fit: contain;
+  border-radius: 10px;
+  background: var(--card-bg-soft);
+  display: block;
 }
-.char-card-name { font-size: 13px; }
-.char-card-tagline { font-size: 10px; }
+.char-card-name { font-size: var(--char-card-name-size); }
+.char-card-tagline { font-size: var(--char-card-tagline-size); }
 
-/* Right-side stats panel — fixed overlay, doesn't affect char grid layout */
-.char-stats-panel-right {
-  position: fixed;
-  top: 54px;
-  right: 12px;
-  width: 240px;
-  max-height: calc(100vh - 70px);
-  overflow-y: auto;
-  z-index: 200;
-  margin: 0;
+/* Dropdown panel — spans full grid width, inserted after the card's row */
+.char-dropdown-panel {
+  grid-column: 1 / -1;
   background: var(--card-bg);
-  border: 2.5px solid var(--accent);
-  border-radius: 16px;
+  border: 2px solid var(--accent);
+  border-radius: 14px;
   padding: 14px 16px 16px;
-  box-shadow: 0 6px 28px rgba(0,0,0,0.22);
-  display: none; /* shown by JS */
+  box-shadow: 0 4px 20px rgba(0,0,0,0.18);
+  display: none;
+  animation: dropdownOpen 0.18s ease-out;
 }
-.char-stats-panel-right.visible { display: block !important; }
+@keyframes dropdownOpen {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.char-dropdown-panel.open { display: block; }
+.char-dropdown-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.char-dropdown-select-btn {
+  padding: 7px 18px;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-weight: 800;
+  font-size: 13px;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+.char-dropdown-select-btn:active { opacity: 0.85; transform: scale(0.97); }
+
+.char-dropdown-flavor {
+  font-size: 12px;
+  color: var(--ink-soft);
+  font-style: italic;
+  margin-bottom: 10px;
+  line-height: 1.5;
+  border-left: 3px solid var(--accent);
+  padding-left: 10px;
+}
+
+/* Hide old right-side panel entirely */
+.char-stats-panel-right,
+.char-stats-panel:not(.char-dropdown-panel) {
+  display: none !important;
+}
 
 .csp-title {
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 800;
+}
+.csp-category {
+  font-size: 11px;
+  color: var(--ink-soft);
+  margin-bottom: 4px;
 }
 .csp-tagline {
   font-size: 11px;
   color: var(--ink-soft);
-  margin-bottom: 12px;
+  margin-bottom: 10px;
   line-height: 1.4;
   font-style: italic;
 }
 .csp-stat-row {
   flex-direction: column;
   align-items: flex-start;
-  gap: 4px;
-  margin-bottom: 10px;
+  gap: 3px;
+  margin-bottom: 8px;
 }
 .csp-stat-label {
   width: auto;
-  font-size: 14px;
+  font-size: 13px;
 }
 .csp-stat-dots {
-  gap: 5px;
+  gap: 4px;
 }
 .csp-dot {
-  font-size: 18px;
+  font-size: 16px;
 }
 .csp-dot-on {
   color: var(--accent);
 }
 .csp-stat-tip {
-  font-size: 11px;
+  font-size: 10px;
   line-height: 1.4;
 }
-/* Descriptive stat rating label */
 .csp-stat-rating {
   font-size: 11px;
   font-weight: 800;
   color: var(--accent);
   text-transform: uppercase;
   letter-spacing: 0.4px;
-}
-
-/* Remove old bottom-positioned panel */
-.char-stats-panel:not(.char-stats-panel-right) {
-  display: none !important;
 }
 
 /* ── 4. Custom mode: compact form to avoid scroll ────────────────────── */
@@ -1048,4 +1125,69 @@ body.dark-theme .char-stats-panel-right {
   }
   .mode-grid { grid-template-columns: 1fr; }
   .custom-form, #custom-ingame-form { grid-template-columns: 1fr; }
+}
+
+/* ============================================================================
+   PERMANENT IN-GAME NAVIGATION BUTTONS
+   ============================================================================
+   These three buttons sit fixed on screen during gameplay at all times.
+   Back (◀) is top-left (existing).
+   Mode Select (🎮) and Character Select (👤) appear top-right during gameplay.
+
+   TO CHANGE THEIR POSITION: edit top/right/left values.
+   TO CHANGE THEIR SIZE: edit font-size and padding.
+   TO HIDE MODE/CHAR BUTTONS: set display:none on #btn-ingame-mode and
+     #btn-ingame-char in the CSS, or remove them from index.html.
+   ============================================================================ */
+
+/* Container that holds the Mode + Char buttons — fixed top-right during game */
+#ingame-nav-btns {
+  display: none;           /* shown only on game screen via JS */
+  position: fixed;
+  top: 12px;
+  right: 70px;             /* stay left of the theme toggle button */
+  z-index: 9999;
+  gap: 8px;
+  flex-direction: row;
+  align-items: center;
+}
+body.ingame-nav-visible #ingame-nav-btns { display: flex; }
+
+#btn-ingame-mode,
+#btn-ingame-char {
+  background: var(--card-bg);
+  border: 2px solid var(--border-soft);
+  border-radius: 99px;
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 800;
+  font-family: var(--font-body);
+  color: var(--ink);
+  cursor: pointer;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.15), 0 3px 0 var(--border-soft);
+  white-space: nowrap;
+  transition: background 0.15s, transform 0.1s, box-shadow 0.1s;
+  letter-spacing: 0.2px;
+}
+#btn-ingame-mode:hover,
+#btn-ingame-char:hover {
+  background: var(--card-bg-soft);
+  transform: translateY(-1px);
+  box-shadow: 0 5px 14px rgba(0,0,0,0.2), 0 3px 0 var(--border-soft);
+}
+#btn-ingame-mode:active,
+#btn-ingame-char:active {
+  transform: translateY(2px);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.12);
+}
+
+/* Hide char button in modes where character can't be changed mid-game.
+   game.js toggles .ingame-char-hidden on body when needed. */
+body.ingame-char-hidden #btn-ingame-char { display: none; }
+
+/* Dark mode */
+body.dark-theme #btn-ingame-mode,
+body.dark-theme #btn-ingame-char {
+  background: var(--card-bg);
+  color: var(--ink);
 }

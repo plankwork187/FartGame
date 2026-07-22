@@ -36,20 +36,20 @@ const CHARACTERS = {
     name: 'Sabrina',
     tagline: 'Pop princess. Sweet smile, chaotic energy.',
     personality: 'playful, confident, always one step ahead of the situation',
-    profile: 'characters/char1_profile.png',
-    vn: 'characters/char1_VN.png',
-    body: 'characters/char1_body.png',
+    profile: 'characters/char1_profile.webp',
+    vn: 'characters/char1_VN.webp',
+    body: 'characters/char1_body.webp',
     faces: {
-      disc_low:  'characters/char1_disc_low.png',
-      disc_high: 'characters/char1_disc_high.png',
-      lean1:     'characters/char1_lean1.png',
-      lean2:     'characters/char1_lean2.png',
-      lean_ext:  'characters/char1_lean_ext.png',
-      relief:    ['characters/char1_relief.png', 'characters/char1_relief2.png'],
-      caught1:   'characters/char1_caught1.png',
-      caught2:   'characters/char1_caught2.png',
-      success1:  'characters/char1_success1.png',
-      success2:  'characters/char1_success2.png',
+      disc_low:  'characters/char1_disc_low.webp',
+      disc_high: 'characters/char1_disc_high.webp',
+      lean1:     'characters/char1_lean1.webp',
+      lean2:     'characters/char1_lean2.webp',
+      lean_ext:  'characters/char1_lean_ext.webp',
+      relief:    ['characters/char1_relief.webp', 'characters/char1_relief2.webp'],
+      caught1:   'characters/char1_caught1.webp',
+      caught2:   'characters/char1_caught2.webp',
+      success1:  'characters/char1_success1.webp',
+      success2:  'characters/char1_success2.webp',
     },
   },
 
@@ -58,20 +58,20 @@ const CHARACTERS = {
     name: 'Olivia',
     tagline: 'Sharp wit. Big feelings. Main-character momentum.',
     personality: 'expressive, determined, turns every setback into a dramatic story',
-    profile: 'characters/char2_profile.png',
-    vn: 'characters/char2_VN.png',
-    body: 'characters/char2_body.png',
+    profile: 'characters/char2_profile.webp',
+    vn: 'characters/char2_VN.webp',
+    body: 'characters/char2_body.webp',
     faces: {
-      disc_low:  'characters/char2_disc_low.png',
-      disc_high: 'characters/char2_disc_high.png',
-      lean1:     'characters/char2_lean1.png',
-      lean2:     'characters/char2_lean2.png',
-      lean_ext:  'characters/char2_lean_ext.png',
-      relief:    ['characters/char2_relief.png', 'characters/char2_relief2.png'],
-      caught1:   'characters/char2_caught1.png',
-      caught2:   'characters/char2_caught2.png',
-      success1:  'characters/char2_success1.png',
-      success2:  'characters/char2_success2.png',
+      disc_low:  'characters/char2_disc_low.webp',
+      disc_high: 'characters/char2_disc_high.webp',
+      lean1:     'characters/char2_lean1.webp',
+      lean2:     'characters/char2_lean2.webp',
+      lean_ext:  'characters/char2_lean_ext.webp',
+      relief:    ['characters/char2_relief.webp', 'characters/char2_relief2.webp'],
+      caught1:   'characters/char2_caught1.webp',
+      caught2:   'characters/char2_caught2.webp',
+      success1:  'characters/char2_success1.webp',
+      success2:  'characters/char2_success2.webp',
     },
   },
 
@@ -80,20 +80,20 @@ const CHARACTERS = {
     name: 'Ariana',
     tagline: 'Unshakable confidence. Every room becomes a stage.',
     personality: 'commanding, poised, effortlessly turns pressure into performance',
-    profile: 'characters/char3_profile.png',
-    vn: 'characters/char3_VN.png',
-    body: 'characters/char3_body.png',
+    profile: 'characters/char3_profile.webp',
+    vn: 'characters/char3_VN.webp',
+    body: 'characters/char3_body.webp',
     faces: {
-      disc_low:  'characters/char3_disc_low.png',
-      disc_high: 'characters/char3_disc_high.png',
-      lean1:     'characters/char3_lean1.png',
-      lean2:     'characters/char3_lean2.png',
-      lean_ext:  'characters/char3_lean_ext.png',
-      relief:    ['characters/char3_relief.png', 'characters/char3_relief2.png'],
-      caught1:   'characters/char3_caught1.png',
-      caught2:   'characters/char3_caught2.png',
-      success1:  'characters/char3_success1.png',
-      success2:  'characters/char3_success2.png',
+      disc_low:  'characters/char3_disc_low.webp',
+      disc_high: 'characters/char3_disc_high.webp',
+      lean1:     'characters/char3_lean1.webp',
+      lean2:     'characters/char3_lean2.webp',
+      lean_ext:  'characters/char3_lean_ext.webp',
+      relief:    ['characters/char3_relief.webp', 'characters/char3_relief2.webp'],
+      caught1:   'characters/char3_caught1.webp',
+      caught2:   'characters/char3_caught2.webp',
+      success1:  'characters/char3_success1.webp',
+      success2:  'characters/char3_success2.webp',
     },
   },
 
@@ -103,20 +103,20 @@ const CHARACTERS = {
     name: 'Beyoncé',
     tagline: 'Cool head, warm heart. Reads the room perfectly.',
     personality: 'calm, observant, always the last one anyone suspects',
-    profile: 'characters/char4_profile.png',
-    vn: 'characters/char4_VN.png',
-    body: 'characters/char4_body.png',
+    profile: 'characters/char4_profile.webp',
+    vn: 'characters/char4_VN.webp',
+    body: 'characters/char4_body.webp',
     faces: {
-      disc_low:  'characters/char4_disc_low.png',
-      disc_high: 'characters/char4_disc_high.png',
-      lean1:     'characters/char4_lean1.png',
-      lean2:     'characters/char4_lean2.png',
-      lean_ext:  'characters/char4_lean_ext.png',
-      relief:    ['characters/char4_relief.png', 'characters/char4_relief2.png'],
-      caught1:   'characters/char4_caught1.png',
-      caught2:   'characters/char4_caught2.png',
-      success1:  'characters/char4_success1.png',
-      success2:  'characters/char4_success2.png',
+      disc_low:  'characters/char4_disc_low.webp',
+      disc_high: 'characters/char4_disc_high.webp',
+      lean1:     'characters/char4_lean1.webp',
+      lean2:     'characters/char4_lean2.webp',
+      lean_ext:  'characters/char4_lean_ext.webp',
+      relief:    ['characters/char4_relief.webp', 'characters/char4_relief2.webp'],
+      caught1:   'characters/char4_caught1.webp',
+      caught2:   'characters/char4_caught2.webp',
+      success1:  'characters/char4_success1.webp',
+      success2:  'characters/char4_success2.webp',
     },
   },
 
@@ -125,47 +125,47 @@ const CHARACTERS = {
     name: 'Madelyn',
     tagline: 'Chaotic good. Plans? Overrated.',
     personality: 'impulsive, hilarious, somehow makes every disaster look intentional',
-    profile: 'characters/char5_profile.png',
-    vn: 'characters/char5_VN.png',
-    body: 'characters/char5_body.png',
+    profile: 'characters/char5_profile.webp',
+    vn: 'characters/char5_VN.webp',
+    body: 'characters/char5_body.webp',
     faces: {
-      disc_low:  'characters/char5_disc_low.png',
-      disc_high: 'characters/char5_disc_high.png',
-      lean1:     'characters/char5_lean1.png',
-      lean2:     'characters/char5_lean2.png',
-      lean_ext:  'characters/char5_lean_ext.png',
-      relief:    ['characters/char5_relief.png', 'characters/char5_relief2.png'],
-      caught1:   'characters/char5_caught1.png',
-      caught2:   'characters/char5_caught2.png',
-      success1:  'characters/char5_success1.png',
-      success2:  'characters/char5_success2.png',
+      disc_low:  'characters/char5_disc_low.webp',
+      disc_high: 'characters/char5_disc_high.webp',
+      lean1:     'characters/char5_lean1.webp',
+      lean2:     'characters/char5_lean2.webp',
+      lean_ext:  'characters/char5_lean_ext.webp',
+      relief:    ['characters/char5_relief.webp', 'characters/char5_relief2.webp'],
+      caught1:   'characters/char5_caught1.webp',
+      caught2:   'characters/char5_caught2.webp',
+      success1:  'characters/char5_success1.webp',
+      success2:  'characters/char5_success2.webp',
     },
   },
 
-  char6: {
-    id: 'char6',
-    name: 'Character 6',
+  bryce: {
+    id: 'bryce',
+    name: 'Bryce',
     tagline: 'Perfectionist. Extremely bad timing.',
     personality: 'meticulous, high-strung, catastrophically unlucky in the most elegant way',
-    profile: 'characters/char6_profile.png',
-    vn: 'characters/char6_VN.png',
-    body: 'characters/char6_body.png',
+    profile: 'characters/char6_profile.webp',
+    vn: 'characters/char6_VN.webp',
+    body: 'characters/char6_body.webp',
     faces: {
-      disc_low:  'characters/char6_disc_low.png',
-      disc_high: 'characters/char6_disc_high.png',
-      lean1:     'characters/char6_lean1.png',
-      lean2:     'characters/char6_lean2.png',
-      lean_ext:  'characters/char6_lean_ext.png',
-      relief:    ['characters/char6_relief.png', 'characters/char6_relief2.png'],
-      caught1:   'characters/char6_caught1.png',
-      caught2:   'characters/char6_caught2.png',
-      success1:  'characters/char6_success1.png',
-      success2:  'characters/char6_success2.png',
+      disc_low:  'characters/char6_disc_low.webp',
+      disc_high: 'characters/char6_disc_high.webp',
+      lean1:     'characters/char6_lean1.webp',
+      lean2:     'characters/char6_lean2.webp',
+      lean_ext:  'characters/char6_lean_ext.webp',
+      relief:    ['characters/char6_relief.webp', 'characters/char6_relief2.webp'],
+      caught1:   'characters/char6_caught1.webp',
+      caught2:   'characters/char6_caught2.webp',
+      success1:  'characters/char6_success1.webp',
+      success2:  'characters/char6_success2.webp',
     },
   },
   // ── CHARACTERS 7–9 (now playable — add art when ready) ──────────────────────────
   // Art uses ASSETS fallback placeholders until real PNGs are dropped in.
-  // TO ADD ART: create characters/char7_profile.png etc. and they'll load automatically.
+  // TO ADD ART: create characters/char7_profile.webp etc. and they'll load automatically.
   //
   // TO EDIT NAME/TAGLINE/PERSONALITY: change the fields below.
   char7: {
@@ -173,20 +173,20 @@ const CHARACTERS = {
     name: 'Character 7',
     tagline: 'Quiet type. Loud consequences.',
     personality: 'reserved on the outside, absolute tornado on the inside',
-    profile: 'characters/char7_profile.png',
-    vn: 'characters/char7_VN.png',
-    body: 'characters/char7_body.png',
+    profile: 'characters/char7_profile.webp',
+    vn: 'characters/char7_VN.webp',
+    body: 'characters/char7_body.webp',
     faces: {
-      disc_low:  'characters/char7_disc_low.png',
-      disc_high: 'characters/char7_disc_high.png',
-      lean1:     'characters/char7_lean1.png',
-      lean2:     'characters/char7_lean2.png',
-      lean_ext:  'characters/char7_lean_ext.png',
-      relief:    ['characters/char7_relief.png', 'characters/char7_relief2.png'],
-      caught1:   'characters/char7_caught1.png',
-      caught2:   'characters/char7_caught2.png',
-      success1:  'characters/char7_success1.png',
-      success2:  'characters/char7_success2.png',
+      disc_low:  'characters/char7_disc_low.webp',
+      disc_high: 'characters/char7_disc_high.webp',
+      lean1:     'characters/char7_lean1.webp',
+      lean2:     'characters/char7_lean2.webp',
+      lean_ext:  'characters/char7_lean_ext.webp',
+      relief:    ['characters/char7_relief.webp', 'characters/char7_relief2.webp'],
+      caught1:   'characters/char7_caught1.webp',
+      caught2:   'characters/char7_caught2.webp',
+      success1:  'characters/char7_success1.webp',
+      success2:  'characters/char7_success2.webp',
     },
   },
 
@@ -195,20 +195,20 @@ const CHARACTERS = {
     name: 'Character 8',
     tagline: 'Always overdressed. Always a liability.',
     personality: 'high maintenance, dramatically unlucky, somehow still charming',
-    profile: 'characters/char8_profile.png',
-    vn: 'characters/char8_VN.png',
-    body: 'characters/char8_body.png',
+    profile: 'characters/char8_profile.webp',
+    vn: 'characters/char8_VN.webp',
+    body: 'characters/char8_body.webp',
     faces: {
-      disc_low:  'characters/char8_disc_low.png',
-      disc_high: 'characters/char8_disc_high.png',
-      lean1:     'characters/char8_lean1.png',
-      lean2:     'characters/char8_lean2.png',
-      lean_ext:  'characters/char8_lean_ext.png',
-      relief:    ['characters/char8_relief.png', 'characters/char8_relief2.png'],
-      caught1:   'characters/char8_caught1.png',
-      caught2:   'characters/char8_caught2.png',
-      success1:  'characters/char8_success1.png',
-      success2:  'characters/char8_success2.png',
+      disc_low:  'characters/char8_disc_low.webp',
+      disc_high: 'characters/char8_disc_high.webp',
+      lean1:     'characters/char8_lean1.webp',
+      lean2:     'characters/char8_lean2.webp',
+      lean_ext:  'characters/char8_lean_ext.webp',
+      relief:    ['characters/char8_relief.webp', 'characters/char8_relief2.webp'],
+      caught1:   'characters/char8_caught1.webp',
+      caught2:   'characters/char8_caught2.webp',
+      success1:  'characters/char8_success1.webp',
+      success2:  'characters/char8_success2.webp',
     },
   },
 
@@ -217,20 +217,20 @@ const CHARACTERS = {
     name: 'Character 9',
     tagline: 'Knows everyone. Owes everyone an apology.',
     personality: 'social butterfly with an unfortunate digestive schedule',
-    profile: 'characters/char9_profile.png',
-    vn: 'characters/char9_VN.png',
-    body: 'characters/char9_body.png',
+    profile: 'characters/char9_profile.webp',
+    vn: 'characters/char9_VN.webp',
+    body: 'characters/char9_body.webp',
     faces: {
-      disc_low:  'characters/char9_disc_low.png',
-      disc_high: 'characters/char9_disc_high.png',
-      lean1:     'characters/char9_lean1.png',
-      lean2:     'characters/char9_lean2.png',
-      lean_ext:  'characters/char9_lean_ext.png',
-      relief:    ['characters/char9_relief.png', 'characters/char9_relief2.png'],
-      caught1:   'characters/char9_caught1.png',
-      caught2:   'characters/char9_caught2.png',
-      success1:  'characters/char9_success1.png',
-      success2:  'characters/char9_success2.png',
+      disc_low:  'characters/char9_disc_low.webp',
+      disc_high: 'characters/char9_disc_high.webp',
+      lean1:     'characters/char9_lean1.webp',
+      lean2:     'characters/char9_lean2.webp',
+      lean_ext:  'characters/char9_lean_ext.webp',
+      relief:    ['characters/char9_relief.webp', 'characters/char9_relief2.webp'],
+      caught1:   'characters/char9_caught1.webp',
+      caught2:   'characters/char9_caught2.webp',
+      success1:  'characters/char9_success1.webp',
+      success2:  'characters/char9_success2.webp',
     },
   },
 
@@ -272,7 +272,7 @@ const CHARACTER_SPECIALS = {
   ariana:   { enabled: false, label: 'Special (TBD)', cooldownMs: 15000, fn: null },
   'beyoncé':{ enabled: false, label: 'Special (TBD)', cooldownMs: 15000, fn: null },
   madelyn:  { enabled: false, label: 'Special (TBD)', cooldownMs: 15000, fn: null },
-  char6:    { enabled: false, label: 'Special (TBD)', cooldownMs: 15000, fn: null },
+  bryce:    { enabled: false, label: 'Special (TBD)', cooldownMs: 15000, fn: null },
   // Future characters — add entries here when chars 7–9 are created
   char7:    { enabled: false, label: 'Special (TBD)', cooldownMs: 15000, fn: null },
   char8:    { enabled: false, label: 'Special (TBD)', cooldownMs: 15000, fn: null },
@@ -284,9 +284,9 @@ const LOCATIONS = [
   {
     id: 'library',
     name: 'Public Library',
-    bg: 'backgrounds/library.png',
-    seat: 'seats/library_seat.png',
-    seatScale: 1.82,  // SEAT SIZE — edit this number to resize this chair. 1.0 = 200px base. Try 0.8–1.3.
+    bg: 'backgrounds/library.webp',
+    seat: 'seats/library_seat.webp',
+    seatScale: 1.52,  // SEAT SIZE — edit this number to resize this chair. 1.0 = 200px base. Try 0.8–1.3.
     seatOffsetY: 0,     // SEAT VERTICAL POSITION — positive moves seat DOWN, negative moves UP (px from bottom). Change this to nudge a specific seat up/down.
     baseNoise: 0.05,
     depthBands: { foreground: 1.0, midground: 0.8, background: 0.5 },
@@ -300,8 +300,8 @@ const LOCATIONS = [
   {
     id: 'movie_theater',
     name: 'Movie Theater',
-    bg: 'backgrounds/movie_theater.png',
-    seat: 'seats/movie_theater_seat.png',
+    bg: 'backgrounds/movie_theater.webp',
+    seat: 'seats/movie_theater_seat.webp',
     seatScale: 1.40,  // SEAT SIZE — edit this number to resize this chair. 1.0 = 200px base. Try 0.8–1.3.
     seatOffsetY: 0,     // SEAT VERTICAL POSITION — positive moves seat DOWN, negative moves UP (px from bottom). Change this to nudge a specific seat up/down.
     baseNoise: 0.55,
@@ -316,8 +316,8 @@ const LOCATIONS = [
   {
     id: 'park',
     name: 'City Park',
-    bg: 'backgrounds/park.png',
-    seat: 'seats/park_seat.png',
+    bg: 'backgrounds/park.webp',
+    seat: 'seats/park_seat.webp',
     seatScale: 1.82,  // SEAT SIZE — edit this number to resize this chair. 1.0 = 200px base. Try 0.8–1.3.
     seatOffsetY: 0,     // SEAT VERTICAL POSITION — positive moves seat DOWN, negative moves UP (px from bottom). Change this to nudge a specific seat up/down.
     baseNoise: 0.3,
@@ -332,8 +332,8 @@ const LOCATIONS = [
   {
     id: 'restaurant',
     name: 'Restaurant',
-    bg: 'backgrounds/restaurant.png',
-    seat: 'seats/restaurant_seat.png',
+    bg: 'backgrounds/restaurant.webp',
+    seat: 'seats/restaurant_seat.webp',
     seatScale: 0.58,  // SEAT SIZE — edit this number to resize this chair. 1.0 = 200px base. Try 0.8–1.3.
     seatOffsetY: 0,     // SEAT VERTICAL POSITION — positive moves seat DOWN, negative moves UP (px from bottom). Change this to nudge a specific seat up/down.
     baseNoise: 0.4,
@@ -348,9 +348,9 @@ const LOCATIONS = [
   {
     id: 'campus',
     name: 'College Campus Quad',
-    bg: 'backgrounds/campus.png',
-    seat: 'seats/campus_seat.png',
-    seatScale: 1.44,  // SEAT SIZE — edit this number to resize this chair. 1.0 = 200px base. Try 0.8–1.3.
+    bg: 'backgrounds/campus.webp',
+    seat: 'seats/campus_seat.webp',
+    seatScale: 1.43,  // SEAT SIZE — edit this number to resize this chair. 1.0 = 200px base. Try 0.8–1.3.
     seatOffsetY: 0,     // SEAT VERTICAL POSITION — positive moves seat DOWN, negative moves UP (px from bottom). Change this to nudge a specific seat up/down.
     baseNoise: 0.35,
     depthBands: { foreground: 1.0, midground: 0.85, background: 0.65 },
@@ -364,8 +364,8 @@ const LOCATIONS = [
   {
     id: 'backstage',
     name: 'Backstage Area',
-    bg: 'backgrounds/backstage.png',
-    seat: 'seats/backstage_seat.png',
+    bg: 'backgrounds/backstage.webp',
+    seat: 'seats/backstage_seat.webp',
     seatScale: 1.41,  // SEAT SIZE — edit this number to resize this chair. 1.0 = 200px base. Try 0.8–1.3.
     seatOffsetY: 0,     // SEAT VERTICAL POSITION — positive moves seat DOWN, negative moves UP (px from bottom). Change this to nudge a specific seat up/down.
     baseNoise: 0.3,
@@ -380,8 +380,8 @@ const LOCATIONS = [
   {
     id: 'waiting_room',
     name: 'Waiting Room',
-    bg: 'backgrounds/waiting_room.png',
-    seat: 'seats/waiting_room_seat.png',
+    bg: 'backgrounds/waiting_room.webp',
+    seat: 'seats/waiting_room_seat.webp',
     seatScale: 1.658,  // SEAT SIZE — edit this number to resize this chair. 1.0 = 200px base. Try 0.8–1.3.
     seatOffsetY: 0,     // SEAT VERTICAL POSITION — positive moves seat DOWN, negative moves UP (px from bottom). Change this to nudge a specific seat up/down.
     baseNoise: 0.15,
@@ -396,8 +396,8 @@ const LOCATIONS = [
   {
     id: 'music_video_set',
     name: 'Music Video Set',
-    bg: 'backgrounds/music_video_set.png',
-    seat: 'seats/music_video_set_seat.png',
+    bg: 'backgrounds/music_video_set.webp',
+    seat: 'seats/music_video_set_seat.webp',
     seatScale: 1.41,  // SEAT SIZE — edit this number to resize this chair. 1.0 = 200px base. Try 0.8–1.3.
     seatOffsetY: 0,     // SEAT VERTICAL POSITION — positive moves seat DOWN, negative moves UP (px from bottom). Change this to nudge a specific seat up/down.
     baseNoise: 0.5,
@@ -412,8 +412,8 @@ const LOCATIONS = [
   {
     id: 'office',
     name: 'Open-Plan Office',
-    bg: 'backgrounds/office.png',
-    seat: 'seats/office_seat.png',
+    bg: 'backgrounds/office.webp',
+    seat: 'seats/office_seat.webp',
     seatScale: 1.1,  // SEAT SIZE — edit this number to resize this chair. 1.0 = 200px base. Try 0.8–1.3.
     seatOffsetY: 0,     // SEAT VERTICAL POSITION — positive moves seat DOWN, negative moves UP (px from bottom). Change this to nudge a specific seat up/down.
     baseNoise: 0.3,
@@ -428,8 +428,8 @@ const LOCATIONS = [
   {
     id: 'hotel',
     name: 'Hotel Lobby',
-    bg: 'backgrounds/hotel_lobby.png',
-    seat: 'seats/hotel_seat.png',
+    bg: 'backgrounds/hotel_lobby.webp',
+    seat: 'seats/hotel_seat.webp',
     seatScale: 1.66,  // SEAT SIZE — edit this number to resize this chair. 1.0 = 200px base. Try 0.8–1.3.
     seatOffsetY: 0,     // SEAT VERTICAL POSITION — positive moves seat DOWN, negative moves UP (px from bottom). Change this to nudge a specific seat up/down.
     baseNoise: 0.1,
@@ -444,8 +444,8 @@ const LOCATIONS = [
   {
     id: 'airport',
     name: 'Airport Terminal',
-    bg: 'backgrounds/airport.png',
-    seat: 'seats/airport_seat.png',
+    bg: 'backgrounds/airport.webp',
+    seat: 'seats/airport_seat.webp',
     seatScale: 1.658,  // SEAT SIZE — edit this number to resize this chair. 1.0 = 200px base. Try 0.8–1.3.
     seatOffsetY: 0,     // SEAT VERTICAL POSITION — positive moves seat DOWN, negative moves UP (px from bottom). Change this to nudge a specific seat up/down.
     baseNoise: 0.5,
@@ -460,8 +460,8 @@ const LOCATIONS = [
   {
     id: 'wedding',
     name: 'Wedding Reception',
-    bg: 'backgrounds/wedding.png',
-    seat: 'seats/wedding_seat.png',
+    bg: 'backgrounds/wedding.webp',
+    seat: 'seats/wedding_seat.webp',
     seatScale: 0.95,  // SEAT SIZE — edit this number to resize this chair. 1.0 = 200px base. Try 0.8–1.3.
     seatOffsetY: 0,     // SEAT VERTICAL POSITION — positive moves seat DOWN, negative moves UP (px from bottom). Change this to nudge a specific seat up/down.
     baseNoise: 0.5,
@@ -476,8 +476,8 @@ const LOCATIONS = [
   {
     id: 'gym',
     name: 'Gym Class',
-    bg: 'backgrounds/gym.png',
-    seat: 'seats/gym_seat.png',
+    bg: 'backgrounds/gym.webp',
+    seat: 'seats/gym_seat.webp',
     seatScale: 1.15,  // SEAT SIZE — edit this number to resize this chair. 1.0 = 200px base. Try 0.8–1.3.
     seatOffsetY: 0,     // SEAT VERTICAL POSITION — positive moves seat DOWN, negative moves UP (px from bottom). Change this to nudge a specific seat up/down.
     baseNoise: 0.4,
@@ -492,8 +492,8 @@ const LOCATIONS = [
   {
     id: 'museum',
     name: 'Art Museum',
-    bg: 'backgrounds/museum.png',
-    seat: 'seats/museum_seat.png',
+    bg: 'backgrounds/museum.webp',
+    seat: 'seats/museum_seat.webp',
     seatScale: 1.48,  // SEAT SIZE — edit this number to resize this chair. 1.0 = 200px base. Try 0.8–1.3.
     seatOffsetY: 0,     // SEAT VERTICAL POSITION — positive moves seat DOWN, negative moves UP (px from bottom). Change this to nudge a specific seat up/down.
     baseNoise: 0.12,
@@ -508,8 +508,8 @@ const LOCATIONS = [
   {
     id: 'aquarium',
     name: 'Aquarium',
-    bg: 'backgrounds/aquarium.png',
-    seat: 'seats/aquarium_seat.png',
+    bg: 'backgrounds/aquarium.webp',
+    seat: 'seats/aquarium_seat.webp',
     seatScale: 1.44,  // SEAT SIZE — edit this number to resize this chair. 1.0 = 200px base. Try 0.8–1.3.
     seatOffsetY: 0,     // SEAT VERTICAL POSITION — positive moves seat DOWN, negative moves UP (px from bottom). Change this to nudge a specific seat up/down.
     baseNoise: 0.3,
@@ -524,8 +524,8 @@ const LOCATIONS = [
   {
     id: 'zoo',
     name: 'Zoo',
-    bg: 'backgrounds/zoo.png',
-    seat: 'seats/zoo_seat.png',
+    bg: 'backgrounds/zoo.webp',
+    seat: 'seats/zoo_seat.webp',
     seatScale: 1.44,  // SEAT SIZE — edit this number to resize this chair. 1.0 = 200px base. Try 0.8–1.3.
     seatOffsetY: 0,     // SEAT VERTICAL POSITION — positive moves seat DOWN, negative moves UP (px from bottom). Change this to nudge a specific seat up/down.
     baseNoise: 0.45,
@@ -540,8 +540,8 @@ const LOCATIONS = [
   {
     id: 'stadium',
     name: 'Sports Stadium',
-    bg: 'backgrounds/stadium.png',
-    seat: 'seats/stadium_seat.png',
+    bg: 'backgrounds/stadium.webp',
+    seat: 'seats/stadium_seat.webp',
     seatScale: 1.40,  // SEAT SIZE — edit this number to resize this chair. 1.0 = 200px base. Try 0.8–1.3.
     seatOffsetY: 0,     // SEAT VERTICAL POSITION — positive moves seat DOWN, negative moves UP (px from bottom). Change this to nudge a specific seat up/down.
     baseNoise: 0.75,
@@ -556,8 +556,8 @@ const LOCATIONS = [
   {
     id: 'movie_set',
     name: 'Movie Set',
-    bg: 'backgrounds/movie_set.png',
-    seat: 'seats/movie_set_seat.png',
+    bg: 'backgrounds/movie_set.webp',
+    seat: 'seats/movie_set_seat.webp',
     seatScale: 1.41,  // SEAT SIZE — edit this number to resize this chair. 1.0 = 200px base. Try 0.8–1.3.
     seatOffsetY: 0,     // SEAT VERTICAL POSITION — positive moves seat DOWN, negative moves UP (px from bottom). Change this to nudge a specific seat up/down.
     baseNoise: 0.35,
@@ -609,48 +609,48 @@ const COMPANIONS = [
     id: 'friend',
     name: 'Best Friend',
     rule: 'covers_for_you',
-    portrait: 'companions/friend_profile.png',
-    body: 'companions/friend.png',
+    portrait: 'companions/friend_profile.webp',
+    body: 'companions/friend.webp',
     description: 'Stands closer than anyone else, but will cover for you once per level by loudly coughing.',
   },
   {
     id: 'manager',
     name: 'Manager',
     rule: 'watches_closely',
-    portrait: 'companions/manager_profile.png',
-    body: 'companions/manager.png',
+    portrait: 'companions/manager_profile.webp',
+    body: 'companions/manager.webp',
     description: 'Has an unusually small personal-space bubble and a higher chance of noticing you mid-lean.',
   },
   {
     id: 'reporter',
     name: 'Reporter',
     rule: 'records_everything',
-    portrait: 'companions/reporter_profile.png',
-    body: 'companions/reporter.png',
+    portrait: 'companions/reporter_profile.webp',
+    body: 'companions/reporter.webp',
     description: 'Recording a microphone the whole time — loud releases are far riskier than usual.',
   },
   {
     id: 'date',
     name: 'First Date',
     rule: 'romance_meter',
-    portrait: 'companions/date_profile.png',
-    body: 'companions/date.png',
+    portrait: 'companions/date_profile.webp',
+    body: 'companions/date.webp',
     description: 'There is a Romance Meter alongside Suspicion. Getting caught tanks it instantly.',
   },
   {
     id: 'director',
     name: 'Director',
     rule: 'calls_cut',
-    portrait: 'companions/director_profile.png',
-    body: 'companions/director.png',
+    portrait: 'companions/director_profile.webp',
+    body: 'companions/director.webp',
     description: 'Periodically yells "Cut!" — a brief freeze where any release is far more noticeable.',
   },
   {
     id: 'security_guard',
     name: 'Security Guard',
     rule: 'patrol_sweep',
-    portrait: 'companions/security_guard_profile.png',
-    body: 'companions/security_guard.png',
+    portrait: 'companions/security_guard_profile.webp',
+    body: 'companions/security_guard.webp',
     description: 'Periodically does a slow sweeping glance across the whole depth of the scene.',
   },
 ];

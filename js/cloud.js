@@ -74,19 +74,29 @@ const CLOUD_SYSTEM = (() => {
   function spawnSmellCloud(dir, power, smellLevel) {
     const effectiveSmell = clamp(power * 0.5 + smellLevel * 0.5, 0, 1);
     const radius = (16 + effectiveSmell * 46) * modEffect('detectionRadiusMult');
-    const el = document.createElement('div');
-    el.className = 'cloud';
-    el.style.width = el.style.height = Math.round(radius * 2) + 'px';
-    el.style.background = effectiveSmell > 0.6
-      ? 'rgba(180,220,80,0.55)'
-      : 'rgba(200,230,120,0.38)';
-    el.style.border = '1px solid rgba(140,180,40,0.4)';
+
+    // Build the cloud element — FART_SPRITES handles visuals (CSS animation or
+    // sprite sheet).  Falls back to the original circle if sprites.js is
+    // not loaded.
+    let el;
+    if (typeof FART_SPRITES !== 'undefined') {
+      el = FART_SPRITES.buildCloudElement(effectiveSmell, radius, dir);
+      el.className = (el.className || '') + ' cloud';
+    } else {
+      el = document.createElement('div');
+      el.className = 'cloud';
+      el.style.width = el.style.height = Math.round(radius * 2) + 'px';
+      el.style.background = effectiveSmell > 0.6
+        ? 'rgba(180,220,80,0.55)'
+        : 'rgba(200,230,120,0.38)';
+      el.style.border = '1px solid rgba(140,180,40,0.4)';
+      el.style.fontSize = Math.round(10 + effectiveSmell * 8) + 'px';
+      el.textContent = effectiveSmell > 0.7 ? '💨' : '';
+    }
 
     const baseX = getPlayerCenterX() - dir * 50;
     el.style.left = (baseX - radius) + 'px';
     el.style.bottom = '90px';
-    el.style.fontSize = Math.round(10 + effectiveSmell * 8) + 'px';
-    el.textContent = effectiveSmell > 0.7 ? '💨' : '';
     sceneEl.appendChild(el);
 
     const driftMult = modEffect('cloudDriftMult');
@@ -129,7 +139,11 @@ const CLOUD_SYSTEM = (() => {
       c.el.style.left = (c.x - c.radius) + 'px';
       c.el.style.opacity = String(Math.max(0, 1 - (c.age / c.maxAge) ** 2));
       checkSmellDetection(c);
-      if (c.age >= c.maxAge) { c.el.remove(); return false; }
+      if (c.age >= c.maxAge) {
+        if (typeof FART_SPRITES !== 'undefined') FART_SPRITES.onCloudRemoved(c.el);
+        c.el.remove();
+        return false;
+      }
       return true;
     });
   }

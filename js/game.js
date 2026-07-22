@@ -286,6 +286,9 @@ const GAME = (() => {
     // Start fart tracker for this level
     RELEASE_TRACKER.startLevel();
 
+    // Notify INGAME_NAV so it can show/hide the character-select button
+    if (typeof INGAME_NAV !== 'undefined') INGAME_NAV.onGameStart(mode);
+
     running = true;
     lastT = performance.now();
     if (rafId) cancelAnimationFrame(rafId);
@@ -315,14 +318,18 @@ const GAME = (() => {
       ASSETS.applyTo(els.sceneSeat, location.seat);
       els.sceneSeat.style.display = '';
       const BASE_CHAIR_WIDTH = 200; // px — matches #scene-seat width in style.css
-      const scale = (location.seatScale != null) ? location.seatScale : 1.0;
+      // Per-character seat override from seatconfig.js (stacks on top of location defaults)
+      const charOverride = (typeof getSeatOverride !== 'undefined' && character)
+        ? getSeatOverride(character.id, location.id)
+        : { seatScale: 1.0, seatOffsetY: 0 };
+      const scale = ((location.seatScale != null) ? location.seatScale : 1.0) * charOverride.seatScale;
       els.sceneSeat.style.width = Math.round(BASE_CHAIR_WIDTH * scale) + 'px';
       // SEAT VERTICAL OFFSET: each location can define seatOffsetY (px) to nudge
       // its seat image up or down. Positive = lower on screen (further from top).
       // Edit seatOffsetY in js/data.js for the specific location you want to adjust.
       // TO MOVE A SEAT UP:   set seatOffsetY to a negative number (e.g. -30)
       // TO MOVE A SEAT DOWN: set seatOffsetY to a positive number (e.g.  30)
-      const offsetY = (location.seatOffsetY != null) ? location.seatOffsetY : 0;
+      const offsetY = ((location.seatOffsetY != null) ? location.seatOffsetY : 0) + charOverride.seatOffsetY;
       els.sceneSeat.style.bottom = offsetY + 'px';
     } else {
       els.sceneSeat.removeAttribute('src');

@@ -22,6 +22,17 @@
      ─────────────────────────────────────────────────────────────────────── -->
 <button id="back-btn" onclick="APP.goBack()" style="display:none" title="Go back">◀ Back</button>
 
+<!-- ── PERMANENT IN-GAME NAV BUTTONS ────────────────────────────────────────
+     Shown during gameplay. Mode Select always appears. Character Select only
+     shows in modes that allow character switching (not Story mid-level).
+     TO REMOVE EITHER BUTTON: delete the <button> tag below.
+     TO CHANGE WHAT THEY DO: edit the onclick handlers or INGAME_NAV in main.js
+     ─────────────────────────────────────────────────────────────────────── -->
+<div id="ingame-nav-btns">
+  <button id="btn-ingame-mode"  onclick="INGAME_NAV.goModeSelect()"  title="Go to Mode Select">🎮 Modes</button>
+  <button id="btn-ingame-char"  onclick="INGAME_NAV.goCharSelect()"  title="Change Character">👤 Character</button>
+</div>
+
 <!-- ── STAT INFO MODAL ─────────────────────────────────────────────────────
      TO EDIT DESCRIPTIONS: find #stat-info-modal below and change the text.
      ─────────────────────────────────────────────────────────────────────── -->
@@ -155,16 +166,7 @@
     <button class="big-btn" id="btn-stat-guide" onclick="document.getElementById('stat-info-modal').style.display='flex'" style="align-self:flex-start;font-size:13px;padding:8px 18px;">ℹ️ Stats Guide</button>
     <div class="char-select-body">
       <div class="char-select-left">
-        <div class="char-grid" id="char-grid"><!-- populated by ui.js --></div>
-        <!-- Slots 7–9: now playable — entries needed in data.js / charstats.js.
-             Until art is added they appear with placeholder images via ASSETS fallback. -->
-      </div>
-      <!-- Character stats panel — RIGHT side, shown on hover/focus -->
-      <div id="char-stats-panel" class="char-stats-panel char-stats-panel-right" style="display:none">
-        <div class="csp-title" id="csp-name"></div>
-        <div class="csp-category" id="csp-category"></div>
-        <div class="csp-tagline" id="csp-tagline"></div>
-        <div class="csp-stats" id="csp-stats"></div>
+        <div class="char-grid" id="char-grid"><!-- populated by ui.js; dropdowns injected inline --></div>
       </div>
     </div>
   </section>
@@ -329,6 +331,12 @@
         <button id="btn-special" style="display:none;border-radius:0;border-left:none;border-right:none;background:var(--caution);color:#fff;font-weight:800;" title="Special Move">⚡</button>
         <button id="btn-right" style="border-radius:0 8px 8px 0;border-left:none;">Hold Right →</button>
       </div>
+      <div id="anim-style-control" style="display:flex;align-items:center;justify-content:center;gap:6px;margin:6px 0 2px;flex-wrap:wrap;">
+        <span style="font-size:11px;color:var(--ink-soft);font-weight:700;">💨 Animation:</span>
+        <button class="anim-style-btn" data-style="original" onclick="FART_SPRITES.setAnimStyle('original');document.querySelectorAll('.anim-style-btn').forEach(b=>b.classList.remove('anim-style-active'));this.classList.add('anim-style-active');">Original</button>
+        <button class="anim-style-btn anim-style-active" data-style="better" onclick="FART_SPRITES.setAnimStyle('better');document.querySelectorAll('.anim-style-btn').forEach(b=>b.classList.remove('anim-style-active'));this.classList.add('anim-style-active');">Better</button>
+        <button class="anim-style-btn" data-style="sprite" onclick="FART_SPRITES.setAnimStyle('sprite');document.querySelectorAll('.anim-style-btn').forEach(b=>b.classList.remove('anim-style-active'));this.classList.add('anim-style-active');">Sprite</button>
+      </div>
       <div id="status-msg"></div>
     </div>
 
@@ -340,8 +348,10 @@
 <script src="js/assets.js"></script>
 <script src="js/audio.js"></script>
 <script src="js/data.js"></script>
+<script src="js/seatconfig.js"></script>
 <script src="js/npc.js"></script>
 <script src="js/cloud.js"></script>
+<script src="js/sprites.js"></script>
 <script src="js/companion.js"></script>
 <script src="js/player.js"></script>
 <script src="js/generator.js"></script>
